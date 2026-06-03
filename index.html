@@ -4,171 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PaintPro CA — Sistema de Gestión 2026</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap');
-:root {
-  --brand:#2C5F8A; --brand-light:#E8F0F8; --brand-mid:#4A86B8;
-  --accent:#E8821A; --accent-light:#FEF3E8;
-  --success:#1E7C4A; --success-light:#E8F5EE;
-  --danger:#C0392B; --danger-light:#FDECEA;
-  --warning:#D4840A; --warning-light:#FEF6E6;
-  --text:#1A1F2E; --text-muted:#6B7280;
-  --border:#E5E7EB; --surface:#F8F9FC; --white:#FFFFFF;
-  --sidebar-w:240px; --radius:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);font-size:14px;}
 
-/* ── LOGIN ── */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a3a56 0%,#2C5F8A 50%,#1a4a6b 100%);}
-.login-card{background:#fff;border-radius:16px;padding:44px 40px;width:420px;box-shadow:0 24px 60px rgba(0,0,0,.25);}
-.login-logo{text-align:center;margin-bottom:28px;}
-.login-logo .icon{font-size:40px;display:block;margin-bottom:8px;}
-.login-logo .name{font-size:22px;font-weight:700;color:var(--brand);}
-.login-logo .sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
-.login-title{font-size:17px;font-weight:600;margin-bottom:20px;}
-.login-field{margin-bottom:14px;}
-.login-field label{display:block;font-size:12px;font-weight:500;color:var(--text-muted);margin-bottom:5px;}
-.login-field input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;transition:border-color .15s;}
-.login-field input:focus{outline:none;border-color:var(--brand);}
-.login-btn{width:100%;background:var(--brand);color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px;font-family:inherit;transition:background .15s;}
-.login-btn:hover{background:var(--brand-mid);}
-.login-error{color:var(--danger);font-size:12px;margin-top:8px;display:none;}
-.login-forgot{font-size:12px;color:var(--brand);text-decoration:none;display:block;text-align:right;margin-top:6px;cursor:pointer;}
-.demo-hint{margin-top:18px;padding:12px;background:var(--surface);border-radius:8px;font-size:12px;color:var(--text-muted);text-align:center;}
+<!-- ── Styles ── -->
+<link rel="stylesheet" href="styles/variables.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/layout.css">
+<link rel="stylesheet" href="styles/modals.css">
+<link rel="stylesheet" href="styles/screens/login.css">
+<link rel="stylesheet" href="styles/screens/perfil.css">
 
-/* ── APP SHELL ── */
-#app{display:none;height:100vh;overflow:hidden;display:none;}
-#app.visible{display:flex;}
-#sidebar{width:var(--sidebar-w);background:var(--brand);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;}
-.logo-area{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.12);}
-.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:9px;}
-.brand-name{font-size:17px;font-weight:600;color:#fff;letter-spacing:-.3px;}
-.brand-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;}
-.nav-section{padding:10px 10px 2px;}
-.nav-label{font-size:10px;font-weight:500;color:rgba(255,255,255,.38);letter-spacing:.8px;text-transform:uppercase;padding:0 8px;margin-bottom:3px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;color:rgba(255,255,255,.68);font-size:13px;font-weight:400;transition:all .15s;user-select:none;}
-.nav-item:hover{background:rgba(255,255,255,.1);color:#fff;}
-.nav-item.active{background:rgba(255,255,255,.17);color:#fff;font-weight:500;}
-.nav-item .icon{font-size:15px;width:19px;text-align:center;}
-.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;}
-.sidebar-footer{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,.1);}
-.user-pill{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background .15s;}
-.user-pill:hover{background:rgba(255,255,255,.1);}
-.user-av{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;}
-.user-name{font-size:13px;color:rgba(255,255,255,.85);font-weight:500;line-height:1.2;}
-.user-role{font-size:10.5px;color:rgba(255,255,255,.42);}
-.logout-btn{background:none;border:none;color:rgba(255,255,255,.5);font-size:11px;cursor:pointer;margin-top:6px;width:100%;text-align:center;padding:4px;font-family:inherit;}
-.logout-btn:hover{color:rgba(255,255,255,.85);}
-
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-#topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 26px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.page-title{font-size:16px;font-weight:600;}
-.topbar-actions{display:flex;align-items:center;gap:10px;}
-#content{flex:1;overflow-y:auto;padding:22px 26px;}
-.screen{display:none;}
-.screen.active{display:block;}
-
-/* ── COMPONENTS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--text);transition:all .15s;font-family:inherit;}
-.btn:hover{background:var(--surface);}
-.btn-primary{background:var(--brand);color:#fff;border-color:var(--brand);}
-.btn-primary:hover{background:var(--brand-mid);border-color:var(--brand-mid);}
-.btn-danger{background:var(--danger-light);color:var(--danger);border-color:#f5c6c6;}
-.btn-danger:hover{background:#fbd5d5;}
-.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent);}
-.btn-sm{padding:4px 9px;font-size:12px;}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden;}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.stat-card.blue::before{background:var(--brand);}
-.stat-card.orange::before{background:var(--accent);}
-.stat-card.green::before{background:var(--success);}
-.stat-card.amber::before{background:var(--warning);}
-.stat-label{font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.stat-value{font-size:24px;font-weight:600;letter-spacing:-.4px;line-height:1;}
-.stat-change{font-size:11.5px;margin-top:5px;color:var(--text-muted);}
-.stat-change .up{color:var(--success);} .stat-change .down{color:var(--danger);}
-.section-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;}
-.section-title{font-size:15px;font-weight:600;}
-.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.card-header{padding:13px 16px;border-bottom:1px solid var(--border);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:space-between;}
-.card-body{padding:16px;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
-.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
-.table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th{text-align:left;padding:9px 13px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);background:var(--surface);border-bottom:1px solid var(--border);}
-td{padding:10px 13px;border-bottom:1px solid var(--border);vertical-align:middle;}
-tr:last-child td{border-bottom:none;}
-tr:hover td{background:#FAFBFD;}
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:11.5px;font-weight:500;}
-.badge-success{background:var(--success-light);color:var(--success);}
-.badge-warning{background:var(--warning-light);color:var(--warning);}
-.badge-danger{background:var(--danger-light);color:var(--danger);}
-.badge-info{background:var(--brand-light);color:var(--brand);}
-.badge-neutral{background:var(--surface);color:var(--text-muted);border:1px solid var(--border);}
-.actions-cell{display:flex;gap:5px;flex-wrap:wrap;}
-.inline-edit{border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:13px;font-family:inherit;width:100%;min-width:80px;background:#fff;}
-.inline-edit:focus{outline:none;border-color:var(--brand);}
-
-/* ── MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.46);z-index:1000;align-items:center;justify-content:center;padding:20px;}
-.modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:13px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.22);}
-.modal-header{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.modal-title{font-size:15px;font-weight:600;}
-.modal-body{padding:22px;}
-.modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
-.close-btn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-muted);line-height:1;padding:2px 6px;}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.form-grid.three{grid-template-columns:1fr 1fr 1fr;}
-.form-full{grid-column:1/-1;}
-.field{display:flex;flex-direction:column;gap:4px;}
-.field label{font-size:12px;font-weight:500;color:var(--text-muted);}
-.field input,.field select,.field textarea{border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-size:13.5px;font-family:inherit;color:var(--text);background:#fff;transition:border-color .15s;}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--brand);}
-.field textarea{resize:vertical;min-height:70px;}
-
-/* ── TOAST ── */
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
-.toast-item{background:#1A1F2E;color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:9px;animation:slideIn .25s ease;box-shadow:0 6px 20px rgba(0,0,0,.25);}
-.toast-item.success{background:var(--success);}
-.toast-item.danger{background:var(--danger);}
-@keyframes slideIn{from{transform:translateX(40px);opacity:0}to{transform:translateX(0);opacity:1}}
-
-/* ── CONFIRM DIALOG ── */
-.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;}
-.confirm-overlay.open{display:flex;}
-.confirm-box{background:#fff;border-radius:12px;padding:28px;width:380px;box-shadow:0 16px 40px rgba(0,0,0,.2);}
-.confirm-icon{font-size:36px;text-align:center;margin-bottom:12px;}
-.confirm-title{font-size:15px;font-weight:600;text-align:center;margin-bottom:6px;}
-.confirm-msg{font-size:13px;color:var(--text-muted);text-align:center;margin-bottom:22px;line-height:1.6;}
-.confirm-btns{display:flex;gap:8px;justify-content:center;}
-
-/* ── PROFILE ── */
-.profile-card{max-width:520px;}
-.avatar-big{width:72px;height:72px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;margin:0 auto 16px;}
-.section-divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
-.danger-zone{border:1px solid #f5c6c6;border-radius:var(--radius);padding:16px;}
-.danger-zone-title{font-size:13px;font-weight:600;color:var(--danger);margin-bottom:6px;}
-.danger-zone-desc{font-size:12px;color:var(--text-muted);margin-bottom:12px;}
-
-/* ── CHART ── */
-.chart-box{position:relative;height:210px;}
-.stock-bar{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
-.stock-fill{height:100%;border-radius:4px;}
-.progress-bar{background:var(--border);border-radius:100px;height:7px;}
-.progress-fill{height:100%;border-radius:100px;}
-.empty-state{text-align:center;padding:40px 20px;color:var(--text-muted);}
-.empty-state .ei{font-size:36px;margin-bottom:10px;}
-.empty-state p{font-size:13px;}
-</style>
+<!-- ── Charts ── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
 </head>
 <body>
 
-<!-- ═══════ LOGIN ═══════ -->
+<!-- ═══════════════════════════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">
@@ -176,50 +29,80 @@ tr:hover td{background:#FAFBFD;}
       <div class="name">PaintPro CA</div>
       <div class="sub">Sistema de Gestión · California 2026</div>
     </div>
+
     <div class="login-title">Iniciar sesión</div>
+
     <div class="login-field">
-      <label>Correo electrónico</label>
+      <label for="login-email">Correo electrónico</label>
       <input type="email" id="login-email" placeholder="usuario@empresa.com" autocomplete="email">
     </div>
+
     <div class="login-field">
-      <label>Contraseña</label>
+      <label for="login-pass">Contraseña</label>
       <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
     </div>
+
     <div id="login-error" class="login-error">⚠ Correo o contraseña incorrectos.</div>
-    <button class="login-btn" onclick="doLogin()">Entrar al sistema</button>
+
+    <button class="login-btn" id="login-btn-submit">Entrar al sistema</button>
     <span class="login-forgot" onclick="showForgot()">¿Olvidaste tu contraseña?</span>
+
     <div class="demo-hint">
       Demo: <strong>admin@paintpro.com</strong> / <strong>demo2026</strong>
     </div>
   </div>
 </div>
 
-<!-- ═══════ APP ═══════ -->
+<!-- ═══════════════════════════════════════════════════════════
+     APP SHELL
+════════════════════════════════════════════════════════════ -->
 <div id="app">
-  <nav id="sidebar">
+
+  <!-- ── SIDEBAR ── -->
+  <nav id="sidebar" role="navigation" aria-label="Menú principal">
     <div class="logo-area">
-      <div class="logo-icon">🎨</div>
+      <div class="logo-icon" aria-hidden="true">🎨</div>
       <div class="brand-name">PaintPro CA</div>
       <div class="brand-sub">Sistema de Gestión 2026</div>
     </div>
+
     <div class="nav-section">
       <div class="nav-label">Principal</div>
-      <div class="nav-item active" onclick="showScreen('dashboard')"><span class="icon">📊</span>Dashboard</div>
-      <div class="nav-item" onclick="showScreen('clientes')"><span class="icon">👥</span>Clientes<span class="nav-badge" id="nb-clientes">0</span></div>
-      <div class="nav-item" onclick="showScreen('proyectos')"><span class="icon">🏗️</span>Proyectos<span class="nav-badge" id="nb-proyectos">0</span></div>
+      <div class="nav-item active" onclick="showScreen('dashboard')" role="button" tabindex="0">
+        <span class="icon">📊</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="showScreen('clientes')" role="button" tabindex="0">
+        <span class="icon">👥</span> Clientes
+        <span class="nav-badge" id="nb-clientes">0</span>
+      </div>
+      <div class="nav-item" onclick="showScreen('proyectos')" role="button" tabindex="0">
+        <span class="icon">🏗️</span> Proyectos
+        <span class="nav-badge" id="nb-proyectos">0</span>
+      </div>
     </div>
+
     <div class="nav-section">
       <div class="nav-label">Operaciones</div>
-      <div class="nav-item" onclick="showScreen('presupuestos')"><span class="icon">📋</span>Presupuestos</div>
-      <div class="nav-item" onclick="showScreen('inventario')"><span class="icon">📦</span>Inventario</div>
-      <div class="nav-item" onclick="showScreen('empleados')"><span class="icon">👷</span>Empleados</div>
+      <div class="nav-item" onclick="showScreen('presupuestos')" role="button" tabindex="0">
+        <span class="icon">📋</span> Presupuestos
+      </div>
+      <div class="nav-item" onclick="showScreen('inventario')" role="button" tabindex="0">
+        <span class="icon">📦</span> Inventario
+      </div>
+      <div class="nav-item" onclick="showScreen('empleados')" role="button" tabindex="0">
+        <span class="icon">👷</span> Empleados
+      </div>
     </div>
+
     <div class="nav-section">
       <div class="nav-label">Cuenta</div>
-      <div class="nav-item" onclick="showScreen('perfil')"><span class="icon">⚙️</span>Mi perfil</div>
+      <div class="nav-item" onclick="showScreen('perfil')" role="button" tabindex="0">
+        <span class="icon">⚙️</span> Mi perfil
+      </div>
     </div>
+
     <div class="sidebar-footer">
-      <div class="user-pill" onclick="showScreen('perfil')">
+      <div class="user-pill" onclick="showScreen('perfil')" role="button" tabindex="0">
         <div class="user-av" id="sidebar-av">—</div>
         <div>
           <div class="user-name" id="sidebar-name">—</div>
@@ -230,57 +113,96 @@ tr:hover td{background:#FAFBFD;}
     </div>
   </nav>
 
+  <!-- ── MAIN ── -->
   <div id="main">
-    <div id="topbar">
+
+    <!-- TOPBAR -->
+    <header id="topbar">
       <div class="page-title" id="page-title">Dashboard</div>
       <div class="topbar-actions">
-        <div style="font-size:12px;color:var(--text-muted)" id="topbar-date">California · 2026</div>
+        <div class="text-muted" style="font-size:12px" id="topbar-date">California · 2026</div>
         <button class="btn btn-primary" onclick="openModal('nuevoPresupuesto')">+ Nuevo presupuesto</button>
       </div>
-    </div>
+    </header>
 
-    <div id="content">
+    <!-- CONTENT -->
+    <main id="content">
 
-      <!-- DASHBOARD -->
-      <div id="screen-dashboard" class="screen active">
+      <!-- ════ DASHBOARD ════ -->
+      <section id="screen-dashboard" class="screen active">
         <div class="stats-grid">
-          <div class="stat-card blue"><div class="stat-label">Ingresos del mes</div><div class="stat-value" id="d-ingresos">—</div><div class="stat-change"><span class="up">↑ 12%</span> vs mes anterior</div></div>
-          <div class="stat-card orange"><div class="stat-label">Proyectos activos</div><div class="stat-value" id="d-proyectos">—</div><div class="stat-change">en ejecución</div></div>
-          <div class="stat-card green"><div class="stat-label">Presupuestos abiertos</div><div class="stat-value" id="d-presup">—</div><div class="stat-change">pendientes de aprobación</div></div>
-          <div class="stat-card amber"><div class="stat-label">Empleados activos</div><div class="stat-value" id="d-empleados">—</div><div class="stat-change">en nómina</div></div>
+          <div class="stat-card blue">
+            <div class="stat-label">Ingresos del mes</div>
+            <div class="stat-value money" id="d-ingresos">—</div>
+            <div class="stat-change"><span class="up">↑ 12%</span> vs mes anterior</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-label">Proyectos activos</div>
+            <div class="stat-value" id="d-proyectos">—</div>
+            <div class="stat-change">en ejecución</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Presupuestos abiertos</div>
+            <div class="stat-value" id="d-presup">—</div>
+            <div class="stat-change">pendientes de aprobación</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">Empleados</div>
+            <div class="stat-value" id="d-empleados">—</div>
+            <div class="stat-change">en nómina</div>
+          </div>
         </div>
+
         <div class="two-col">
-          <div class="card"><div class="card-header">Ingresos mensuales</div><div class="card-body"><div class="chart-box"><canvas id="chartIngresos"></canvas></div></div></div>
-          <div class="card"><div class="card-header">Distribución por tipo</div><div class="card-body"><div class="chart-box"><canvas id="chartTipos"></canvas></div></div></div>
+          <div class="card">
+            <div class="card-header">Ingresos mensuales</div>
+            <div class="card-body"><div class="chart-box"><canvas id="chartIngresos"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">Distribución por tipo</div>
+            <div class="card-body"><div class="chart-box"><canvas id="chartTipos"></canvas></div></div>
+          </div>
         </div>
+
         <div class="card">
           <div class="card-header">Presupuestos recientes</div>
-          <div class="table-wrap"><table>
-            <thead><tr><th>#</th><th>Cliente</th><th>Proyecto</th><th>Total</th><th>Estado</th></tr></thead>
-            <tbody id="dash-presup-recent"></tbody>
-          </table></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>#</th><th>Cliente</th><th>Proyecto</th><th>Total</th><th>Estado</th></tr></thead>
+              <tbody id="dash-presup-recent"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- CLIENTES -->
-      <div id="screen-clientes" class="screen">
+      <!-- ════ CLIENTES ════ -->
+      <section id="screen-clientes" class="screen">
         <div class="section-row">
-          <div><div class="section-title">Clientes</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px" id="clientes-count">—</div></div>
+          <div>
+            <div class="section-title">Clientes</div>
+            <div class="text-muted" style="font-size:12px;margin-top:2px" id="clientes-count">—</div>
+          </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <input type="text" id="clientes-search" placeholder="🔍 Buscar..." oninput="renderClientes()" style="border:1px solid var(--border);border-radius:7px;padding:6px 11px;font-size:13px;width:200px;font-family:inherit">
+            <input type="text" id="clientes-search" placeholder="🔍 Buscar..."
+              oninput="ClientesUI.render()"
+              style="border:1px solid var(--border);border-radius:7px;padding:6px 11px;font-size:13px;width:200px;font-family:var(--font-sans)">
             <button class="btn btn-primary" onclick="openModal('nuevoCliente')">+ Nuevo cliente</button>
           </div>
         </div>
         <div class="card">
-          <div class="table-wrap"><table>
-            <thead><tr><th>Nombre</th><th>Empresa</th><th>Ciudad</th><th>Teléfono</th><th>Email</th><th>Proyectos</th><th>Acciones</th></tr></thead>
-            <tbody id="clientes-tbody"></tbody>
-          </table></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Nombre</th><th>Empresa</th><th>Ciudad</th><th>Teléfono</th><th>Email</th><th>Proyectos</th><th>Acciones</th></tr>
+              </thead>
+              <tbody id="clientes-tbody"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- PROYECTOS -->
-      <div id="screen-proyectos" class="screen">
+      <!-- ════ PROYECTOS ════ -->
+      <section id="screen-proyectos" class="screen">
         <div class="section-row">
           <div class="section-title">Proyectos</div>
           <button class="btn btn-primary" onclick="openModal('nuevoProyecto')">+ Nuevo proyecto</button>
@@ -299,120 +221,136 @@ tr:hover td{background:#FAFBFD;}
             <div id="proj-col-done"></div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- PRESUPUESTOS -->
-      <div id="screen-presupuestos" class="screen">
+      <!-- ════ PRESUPUESTOS ════ -->
+      <section id="screen-presupuestos" class="screen">
         <div class="section-row">
           <div class="section-title">Presupuestos</div>
           <button class="btn btn-primary" onclick="openModal('nuevoPresupuesto')">+ Nuevo presupuesto</button>
         </div>
         <div class="card">
-          <div class="table-wrap"><table>
-            <thead><tr><th>#</th><th>Cliente</th><th>Proyecto</th><th>Fecha</th><th>Área (sqft)</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
-            <tbody id="presup-tbody"></tbody>
-          </table></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>#</th><th>Cliente</th><th>Proyecto</th><th>Fecha</th><th>Área</th><th>Total</th><th>Estado</th><th>Acciones</th></tr>
+              </thead>
+              <tbody id="presup-tbody"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- INVENTARIO -->
-      <div id="screen-inventario" class="screen">
+      <!-- ════ INVENTARIO ════ -->
+      <section id="screen-inventario" class="screen">
         <div class="section-row">
           <div class="section-title">Inventario de materiales</div>
           <button class="btn btn-primary" onclick="openModal('nuevoMaterial')">+ Agregar material</button>
         </div>
-        <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stats-grid cols-3">
           <div class="stat-card green"><div class="stat-label">En stock</div><div class="stat-value" id="inv-ok">—</div></div>
           <div class="stat-card amber"><div class="stat-label">Stock bajo</div><div class="stat-value" id="inv-low">—</div></div>
-          <div class="stat-card orange"><div class="stat-label">Valor inventario</div><div class="stat-value" id="inv-val">—</div></div>
+          <div class="stat-card orange"><div class="stat-label">Valor inventario</div><div class="stat-value money" id="inv-val">—</div></div>
         </div>
         <div class="card">
-          <div class="table-wrap"><table>
-            <thead><tr><th>Producto</th><th>Categoría</th><th>Precio unit.</th><th>Stock</th><th>Mínimo</th><th>Nivel</th><th>Acciones</th></tr></thead>
-            <tbody id="inv-tbody"></tbody>
-          </table></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Producto</th><th>Categoría</th><th>Precio unit.</th><th>Stock</th><th>Mínimo</th><th>Nivel</th><th>Acciones</th></tr>
+              </thead>
+              <tbody id="inv-tbody"></tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- EMPLEADOS -->
-      <div id="screen-empleados" class="screen">
+      <!-- ════ EMPLEADOS ════ -->
+      <section id="screen-empleados" class="screen">
         <div class="section-row">
           <div class="section-title">Equipo de trabajo</div>
           <button class="btn btn-primary" onclick="openModal('nuevoEmpleado')">+ Agregar empleado</button>
         </div>
         <div id="empleados-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px"></div>
-      </div>
+      </section>
 
-      <!-- PERFIL -->
-      <div id="screen-perfil" class="screen">
+      <!-- ════ PERFIL ════ -->
+      <section id="screen-perfil" class="screen">
         <div class="section-row"><div class="section-title">Mi perfil</div></div>
         <div class="two-col">
-          <div class="card profile-card">
+
+          <div class="card">
             <div class="card-header">Información personal</div>
             <div class="card-body">
               <div style="text-align:center;margin-bottom:20px">
                 <div class="avatar-big" id="profile-avatar">—</div>
                 <div style="font-size:15px;font-weight:600" id="profile-name-display">—</div>
-                <div style="font-size:12px;color:var(--text-muted)" id="profile-email-display">—</div>
+                <div class="text-muted" id="profile-email-display">—</div>
               </div>
               <div class="form-grid">
-                <div class="field form-full"><label>Nombre completo</label><input type="text" id="pf-nombre" placeholder="Tu nombre"></div>
-                <div class="field form-full"><label>Correo electrónico</label><input type="email" id="pf-email" placeholder="correo@empresa.com"></div>
-                <div class="field"><label>Teléfono</label><input type="text" id="pf-tel" placeholder="(555) 000-0000"></div>
-                <div class="field"><label>Puesto</label><input type="text" id="pf-puesto" placeholder="Administrador"></div>
-                <div class="field form-full"><label>Empresa</label><input type="text" id="pf-empresa" placeholder="Nombre de la empresa"></div>
+                <div class="field form-full"><label>Nombre completo</label><input type="text" id="pf-nombre"></div>
+                <div class="field form-full"><label>Correo electrónico</label><input type="email" id="pf-email"></div>
+                <div class="field"><label>Teléfono</label><input type="text" id="pf-tel"></div>
+                <div class="field"><label>Puesto</label><input type="text" id="pf-puesto"></div>
+                <div class="field form-full"><label>Empresa</label><input type="text" id="pf-empresa"></div>
               </div>
-              <button class="btn btn-primary" style="margin-top:14px;width:100%" onclick="saveProfile()">Guardar cambios</button>
+              <button class="btn btn-primary btn-full" style="margin-top:14px" onclick="saveProfile()">Guardar cambios</button>
             </div>
           </div>
+
           <div>
             <div class="card" style="margin-bottom:14px">
               <div class="card-header">Cambiar contraseña</div>
               <div class="card-body">
-                <div class="field" style="margin-bottom:10px"><label>Contraseña actual</label><input type="password" id="pw-actual" placeholder="••••••••"></div>
-                <div class="field" style="margin-bottom:10px"><label>Nueva contraseña</label><input type="password" id="pw-nueva" placeholder="••••••••"></div>
-                <div class="field" style="margin-bottom:14px"><label>Confirmar contraseña</label><input type="password" id="pw-confirmar" placeholder="••••••••"></div>
-                <button class="btn btn-primary" style="width:100%" onclick="changePassword()">Actualizar contraseña</button>
+                <div class="field" style="margin-bottom:10px"><label>Contraseña actual</label><input type="password" id="pw-actual"></div>
+                <div class="field" style="margin-bottom:10px"><label>Nueva contraseña</label><input type="password" id="pw-nueva"></div>
+                <div class="field" style="margin-bottom:14px"><label>Confirmar contraseña</label><input type="password" id="pw-confirmar"></div>
+                <button class="btn btn-primary btn-full" onclick="changePassword()">Actualizar contraseña</button>
               </div>
             </div>
+
             <div class="card">
-              <div class="card-header">Configuración del sistema</div>
+              <div class="card-header">Configuración (California 2026)</div>
               <div class="card-body">
-                <div class="field" style="margin-bottom:10px"><label>Tarifa mano de obra ($/hr)</label><input type="number" id="cfg-labor" value="32"></div>
-                <div class="field" style="margin-bottom:10px"><label>Impuesto CA (%)</label><input type="number" id="cfg-tax" value="10.25" step="0.01"></div>
-                <div class="field" style="margin-bottom:10px"><label>Costos indirectos (%)</label><input type="number" id="cfg-overhead" value="15"></div>
-                <div class="field" style="margin-bottom:14px"><label>Margen de utilidad (%)</label><input type="number" id="cfg-margen" value="35"></div>
-                <button class="btn btn-primary" style="width:100%" onclick="saveConfig()">Guardar configuración</button>
+                <div class="form-grid">
+                  <div class="field"><label>Tarifa mano de obra ($/hr)</label><input type="number" id="cfg-labor"></div>
+                  <div class="field"><label>Impuesto CA (%)</label><input type="number" id="cfg-tax" step="0.01"></div>
+                  <div class="field"><label>Costos indirectos (%)</label><input type="number" id="cfg-overhead"></div>
+                  <div class="field"><label>Margen de utilidad (%)</label><input type="number" id="cfg-margen"></div>
+                </div>
+                <button class="btn btn-primary btn-full" style="margin-top:14px" onclick="saveConfig()">Guardar configuración</button>
                 <hr class="section-divider">
                 <div class="danger-zone">
                   <div class="danger-zone-title">⚠ Zona de peligro</div>
-                  <div class="danger-zone-desc">Eliminar todos los datos del sistema. Esta acción no se puede deshacer.</div>
+                  <div class="danger-zone-desc">Eliminar todos los datos del sistema. Irreversible.</div>
                   <button class="btn btn-danger" onclick="confirmDeleteAll()">Borrar todos los datos</button>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
-      </div>
+      </section>
 
-    </div>
-  </div>
-</div>
+    </main>
+  </div><!-- /main -->
+</div><!-- /app -->
 
-<!-- ═══════ MODALS ═══════ -->
+<!-- ═══════════════════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════════════════ -->
 
 <!-- Nuevo / Editar Cliente -->
-<div class="modal-overlay" id="modal-nuevoCliente">
+<div class="modal-overlay" id="modal-nuevoCliente" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-cliente-title">Nuevo cliente</div>
-      <button class="close-btn" onclick="closeModal('nuevoCliente')">×</button>
+      <button class="close-btn" onclick="closeModal('nuevoCliente')" aria-label="Cerrar">×</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="c-id">
       <div class="form-grid">
         <div class="field"><label>Nombre completo *</label><input type="text" id="c-nombre" placeholder="John Smith"></div>
-        <div class="field"><label>Empresa</label><input type="text" id="c-empresa" placeholder="ABC Corp (opcional)"></div>
+        <div class="field"><label>Empresa</label><input type="text" id="c-empresa" placeholder="ABC Corp"></div>
         <div class="field"><label>Teléfono</label><input type="text" id="c-tel" placeholder="(555) 000-0000"></div>
         <div class="field"><label>Email</label><input type="email" id="c-email" placeholder="email@example.com"></div>
         <div class="field form-full"><label>Dirección</label><input type="text" id="c-dir" placeholder="123 Main St"></div>
@@ -429,11 +367,11 @@ tr:hover td{background:#FAFBFD;}
 </div>
 
 <!-- Nuevo / Editar Proyecto -->
-<div class="modal-overlay" id="modal-nuevoProyecto">
+<div class="modal-overlay" id="modal-nuevoProyecto" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-proyecto-title">Nuevo proyecto</div>
-      <button class="close-btn" onclick="closeModal('nuevoProyecto')">×</button>
+      <button class="close-btn" onclick="closeModal('nuevoProyecto')" aria-label="Cerrar">×</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="p-id">
@@ -448,9 +386,13 @@ tr:hover td{background:#FAFBFD;}
         </div>
         <div class="field"><label>Fecha inicio</label><input type="date" id="p-finicio"></div>
         <div class="field"><label>Fecha fin estimada</label><input type="date" id="p-ffin"></div>
-        <div class="field form-full"><label>Dirección del trabajo</label><input type="text" id="p-dir" placeholder="Dirección completa"></div>
+        <div class="field form-full"><label>Dirección</label><input type="text" id="p-dir"></div>
         <div class="field"><label>Estado</label>
-          <select id="p-estado"><option value="pendiente">Por iniciar</option><option value="activo">En progreso</option><option value="completado">Completado</option></select>
+          <select id="p-estado">
+            <option value="pendiente">Por iniciar</option>
+            <option value="activo">En progreso</option>
+            <option value="completado">Completado</option>
+          </select>
         </div>
         <div class="field"><label>Valor estimado ($)</label><input type="number" id="p-valor" placeholder="5000"></div>
       </div>
@@ -463,18 +405,18 @@ tr:hover td{background:#FAFBFD;}
 </div>
 
 <!-- Nuevo / Editar Presupuesto -->
-<div class="modal-overlay" id="modal-nuevoPresupuesto">
+<div class="modal-overlay" id="modal-nuevoPresupuesto" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-presup-title">Nuevo presupuesto</div>
-      <button class="close-btn" onclick="closeModal('nuevoPresupuesto')">×</button>
+      <button class="close-btn" onclick="closeModal('nuevoPresupuesto')" aria-label="Cerrar">×</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="est-id">
       <div class="form-grid">
         <div class="field"><label>Número *</label><input type="text" id="est-num" placeholder="EST-2026-001"></div>
         <div class="field"><label>Cliente *</label><select id="est-cliente"></select></div>
-        <div class="field"><label>Descripción del proyecto *</label><input type="text" id="est-proyecto" placeholder="Interior Residencial"></div>
+        <div class="field"><label>Descripción *</label><input type="text" id="est-proyecto" placeholder="Interior Residencial"></div>
         <div class="field"><label>Fecha</label><input type="date" id="est-fecha"></div>
         <div class="field"><label>Área (sqft)</label><input type="number" id="est-sqft" placeholder="1500" oninput="calcPresupuesto()"></div>
         <div class="field"><label>Tipo de trabajo</label>
@@ -486,30 +428,45 @@ tr:hover td{background:#FAFBFD;}
             <option value="industrial">Industrial</option>
             <option value="gabinetes">Gabinetes</option>
             <option value="techo">Techo</option>
+            <option value="drywall">Drywall</option>
           </select>
         </div>
-        <div class="field"><label>Número de capas</label>
-          <select id="est-capas" onchange="calcPresupuesto()"><option value="1">1 capa</option><option value="2" selected>2 capas</option><option value="3">3 capas</option></select>
+        <div class="field"><label>Capas</label>
+          <select id="est-capas" onchange="calcPresupuesto()">
+            <option value="1">1 capa</option>
+            <option value="2" selected>2 capas</option>
+            <option value="3">3 capas</option>
+          </select>
         </div>
         <div class="field"><label>Tipo de pintura</label>
           <select id="est-pintura" onchange="calcPresupuesto()">
             <option value="standard">Estándar ($38/gal)</option>
             <option value="premium">Premium ($62/gal)</option>
             <option value="luxury">Luxury ($68/gal)</option>
+            <option value="exterior_grade">Exterior Grade ($55/gal)</option>
             <option value="industrial">Industrial ($85/gal)</option>
           </select>
         </div>
         <div class="field"><label>Margen utilidad (%)</label><input type="number" id="est-margen" value="35" oninput="calcPresupuesto()"></div>
         <div class="field"><label>Estado</label>
-          <select id="est-estado"><option>Propuesta</option><option>Pendiente</option><option>Aprobado</option><option>Revisión</option><option>Rechazado</option></select>
+          <select id="est-estado">
+            <option>Propuesta</option><option>Pendiente</option>
+            <option>Aprobado</option><option>Revisión</option><option>Rechazado</option>
+          </select>
         </div>
       </div>
-      <div id="est-calc-result" style="margin-top:14px;padding:14px;background:var(--surface);border-radius:8px;font-size:13px;display:none">
-        <div style="font-weight:600;margin-bottom:8px;color:var(--brand)">Cálculo automático (CA 2026)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px" id="est-calc-detail"></div>
-        <div style="margin-top:10px;font-size:15px;font-weight:700;color:var(--brand)">Total: <span id="est-calc-total">—</span></div>
+
+      <!-- Auto-calculation result -->
+      <div id="est-calc-result" class="calc-result-box" style="display:none">
+        <div class="calc-title">Cálculo automático (CA 2026)</div>
+        <div class="calc-grid" id="est-calc-detail"></div>
+        <div class="calc-total">Total: <span id="est-calc-total">—</span></div>
       </div>
-      <div class="field form-full" style="margin-top:12px"><label>Notas</label><textarea id="est-notas" placeholder="Condiciones especiales, alcance..."></textarea></div>
+
+      <div class="field form-full" style="margin-top:12px">
+        <label>Notas</label>
+        <textarea id="est-notas" placeholder="Condiciones especiales, alcance..."></textarea>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('nuevoPresupuesto')">Cancelar</button>
@@ -519,11 +476,11 @@ tr:hover td{background:#FAFBFD;}
 </div>
 
 <!-- Nuevo / Editar Material -->
-<div class="modal-overlay" id="modal-nuevoMaterial">
+<div class="modal-overlay" id="modal-nuevoMaterial" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-mat-title">Agregar material</div>
-      <button class="close-btn" onclick="closeModal('nuevoMaterial')">×</button>
+      <button class="close-btn" onclick="closeModal('nuevoMaterial')" aria-label="Cerrar">×</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="m-id">
@@ -533,7 +490,7 @@ tr:hover td{background:#FAFBFD;}
           <select id="m-cat"><option>Pintura</option><option>Primer</option><option>Herramienta</option><option>Suministro</option></select>
         </div>
         <div class="field"><label>Unidad</label>
-          <select id="m-unidad"><option>Galón</option><option>Cuarto</option><option>Pieza</option><option>Rollo</option><option>Paquete</option><option>Cubeta</option></select>
+          <select id="m-unidad"><option>Galón</option><option>Cuarto</option><option>Pieza</option><option>Rollo</option><option>Paquete</option></select>
         </div>
         <div class="field"><label>Precio unitario ($)</label><input type="number" id="m-precio" placeholder="38.00" step="0.01"></div>
         <div class="field"><label>Stock actual</label><input type="number" id="m-stock" placeholder="20"></div>
@@ -548,11 +505,11 @@ tr:hover td{background:#FAFBFD;}
 </div>
 
 <!-- Nuevo / Editar Empleado -->
-<div class="modal-overlay" id="modal-nuevoEmpleado">
+<div class="modal-overlay" id="modal-nuevoEmpleado" role="dialog" aria-modal="true">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-emp-title">Agregar empleado</div>
-      <button class="close-btn" onclick="closeModal('nuevoEmpleado')">×</button>
+      <button class="close-btn" onclick="closeModal('nuevoEmpleado')" aria-label="Cerrar">×</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="e-id">
@@ -561,7 +518,7 @@ tr:hover td{background:#FAFBFD;}
         <div class="field"><label>Puesto</label>
           <select id="e-puesto"><option>Pintor Senior</option><option>Pintor</option><option>Asistente</option><option>Supervisor</option><option>Gerente</option></select>
         </div>
-        <div class="field"><label>Tarifa ($/hora)</label><input type="number" id="e-tarifa" placeholder="32" step="0.5"></div>
+        <div class="field"><label>Tarifa ($/hora) *</label><input type="number" id="e-tarifa" placeholder="32" step="0.5"></div>
         <div class="field"><label>Teléfono</label><input type="text" id="e-tel" placeholder="(555) 000-0000"></div>
         <div class="field"><label>Email</label><input type="email" id="e-email" placeholder="email@example.com"></div>
         <div class="field"><label>Licencia CA #</label><input type="text" id="e-lic" placeholder="CAC-0000 (opcional)"></div>
@@ -576,7 +533,7 @@ tr:hover td{background:#FAFBFD;}
 </div>
 
 <!-- Confirm Dialog -->
-<div class="confirm-overlay" id="confirm-overlay">
+<div class="confirm-overlay" id="confirm-overlay" role="dialog" aria-modal="true">
   <div class="confirm-box">
     <div class="confirm-icon" id="confirm-icon">⚠️</div>
     <div class="confirm-title" id="confirm-title">¿Confirmar acción?</div>
@@ -589,898 +546,28 @@ tr:hover td{background:#FAFBFD;}
 </div>
 
 <!-- Toast container -->
-<div id="toast"></div>
+<div id="toast" aria-live="polite"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT — Core (order matters)
+════════════════════════════════════════════════════════════ -->
+<script src="src/core/database.js"></script>
+<script src="src/core/auth.js"></script>
+<script src="src/core/router.js"></script>
+<script src="src/core/utils.js"></script>
+
+<!-- Features -->
+<script src="src/features/clientes/clientes.repository.js"></script>
+<script src="src/features/clientes/clientes.service.js"></script>
+<script src="src/features/clientes/clientes.ui.js"></script>
+<script src="src/features/empleados/empleados.js"></script>
+<script src="src/features/presupuestos/presupuestos.calculator.js"></script>
+<script src="src/features/presupuestos/presupuestos.js"></script>
+<script src="src/features/proyectos/proyectos-inventario.js"></script>
+<script src="src/features/dashboard/dashboard-perfil.js"></script>
+
+<!-- App bootstrap (last) -->
+<script src="src/app.js"></script>
 
-<script>
-// ════════════════════════════════════════════════
-// STORAGE — persiste todo en localStorage
-// ════════════════════════════════════════════════
-const STORAGE_KEY = 'paintpro_db_v2';
-
-function loadDB() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) return JSON.parse(raw);
-  return getDefaultDB();
-}
-
-function saveDB() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
-}
-
-function getDefaultDB() {
-  return {
-    users: [
-      { id:1, nombre:'Juan Martínez', email:'admin@paintpro.com', password:'demo2026', telefono:'(323) 555-0100', puesto:'Administrador', empresa:'LA Premium Painting Co.' }
-    ],
-    clientes: [
-      { id:1, nombre:'María Rodríguez', empresa:'—', ciudad:'Los Angeles', telefono:'(213) 555-0121', email:'m.rodriguez@email.com', zip:'90028', dir:'456 Oak Ave', notas:'' },
-      { id:2, nombre:'Carlos Vega', empresa:'—', ciudad:'Pasadena', telefono:'(626) 555-0187', email:'c.vega@email.com', zip:'91101', dir:'789 Pine St', notas:'' },
-      { id:3, nombre:'Sunset Plaza LLC', empresa:'Sunset Plaza LLC', ciudad:'Beverly Hills', telefono:'(310) 555-0234', email:'ops@sunsetplaza.com', zip:'90210', dir:'1 Sunset Blvd', notas:'Cliente comercial VIP' },
-      { id:4, nombre:'Pacific Offices Inc', empresa:'Pacific Offices Inc', ciudad:'Santa Monica', telefono:'(310) 555-0312', email:'fm@pacificoffices.com', zip:'90401', dir:'200 Wilshire Blvd', notas:'' },
-      { id:5, nombre:'Linda Chen', empresa:'—', ciudad:'Burbank', telefono:'(818) 555-0456', email:'lchen@email.com', zip:'91505', dir:'321 Maple Dr', notas:'' },
-    ],
-    proyectos: [
-      { id:1, clienteId:1, nombre:'Interior Residencial', tipo:'Residencial', subtipo:'Interior', dir:'456 Oak Ave, Los Angeles', estado:'activo', finicio:'2026-05-10', ffin:'2026-05-20', valor:4200 },
-      { id:2, clienteId:3, nombre:'Comercial Exterior', tipo:'Comercial', subtipo:'Exterior', dir:'1 Sunset Blvd, Beverly Hills', estado:'pendiente', finicio:'2026-06-05', ffin:'2026-06-20', valor:18500 },
-      { id:3, clienteId:2, nombre:'Interior + Exterior', tipo:'Residencial', subtipo:'Interior + Exterior', dir:'789 Pine St, Pasadena', estado:'activo', finicio:'2026-05-15', ffin:'2026-06-01', valor:6800 },
-      { id:4, clienteId:5, nombre:'Exterior Residencial', tipo:'Residencial', subtipo:'Exterior', dir:'321 Maple Dr, Burbank', estado:'activo', finicio:'2026-05-18', ffin:'2026-05-25', valor:2900 },
-    ],
-    presupuestos: [
-      { id:1, num:'EST-2026-054', clienteId:1, proyecto:'Interior Residencial', fecha:'2026-05-15', sqft:1800, tipo:'interior_res', capas:2, pintura:'premium', margen:35, total:4200, estado:'Aprobado', notas:'' },
-      { id:2, num:'EST-2026-055', clienteId:3, proyecto:'Comercial Exterior', fecha:'2026-05-18', sqft:12000, tipo:'exterior_com', capas:2, pintura:'exterior_grade', margen:30, total:18500, estado:'Pendiente', notas:'Incluir andamios' },
-      { id:3, num:'EST-2026-056', clienteId:2, proyecto:'Interior + Exterior', fecha:'2026-05-20', sqft:2400, tipo:'interior_res', capas:2, pintura:'premium', margen:35, total:6800, estado:'Aprobado', notas:'' },
-      { id:4, num:'EST-2026-057', clienteId:4, proyecto:'Industrial Interior', fecha:'2026-05-22', sqft:28000, tipo:'industrial', capas:2, pintura:'industrial', margen:25, total:32000, estado:'Propuesta', notas:'Epoxi en pisos' },
-      { id:5, num:'EST-2026-058', clienteId:5, proyecto:'Exterior Residencial', fecha:'2026-05-24', sqft:900, tipo:'exterior_res', capas:2, pintura:'standard', margen:35, total:2900, estado:'Aprobado', notas:'' },
-    ],
-    inventario: [
-      { id:1, nombre:'Sherwin-Williams Duration Ext.', cat:'Pintura', unidad:'Galón', precio:72, stock:18, min:10 },
-      { id:2, nombre:'Benjamin Moore Regal Select', cat:'Pintura', unidad:'Galón', precio:68, stock:24, min:10 },
-      { id:3, nombre:'Behr Premium Plus Interior', cat:'Pintura', unidad:'Galón', precio:38, stock:36, min:15 },
-      { id:4, nombre:'Zinsser Bulls Eye Primer', cat:'Primer', unidad:'Galón', precio:28, stock:8, min:12 },
-      { id:5, nombre:'Rodillo 9" nap 3/8"', cat:'Herramienta', unidad:'Pieza', precio:8, stock:22, min:15 },
-      { id:6, nombre:'Brocha angular 2.5"', cat:'Herramienta', unidad:'Pieza', precio:12, stock:6, min:10 },
-      { id:7, nombre:'Masking tape 3M 2090', cat:'Suministro', unidad:'Rollo', precio:5, stock:45, min:20 },
-      { id:8, nombre:'Lija 220 grit (paquete)', cat:'Suministro', unidad:'Paquete', precio:9, stock:4, min:8 },
-    ],
-    empleados: [
-      { id:1, nombre:'Miguel Hernández', puesto:'Pintor Senior', tarifa:45, telefono:'(213) 555-1100', email:'m.hernandez@lapaintco.com', licencia:'CAC-4521', notas:'' },
-      { id:2, nombre:'Andrés Morales', puesto:'Pintor', tarifa:32, telefono:'(818) 555-2200', email:'a.morales@lapaintco.com', licencia:'—', notas:'' },
-      { id:3, nombre:'Luis Pérez', puesto:'Pintor', tarifa:32, telefono:'(626) 555-3300', email:'l.perez@lapaintco.com', licencia:'—', notas:'' },
-      { id:4, nombre:'Roberto Santos', puesto:'Asistente', tarifa:22, telefono:'(562) 555-4400', email:'r.santos@lapaintco.com', licencia:'—', notas:'' },
-      { id:5, nombre:'David Kim', puesto:'Supervisor', tarifa:52, telefono:'(310) 555-5500', email:'d.kim@lapaintco.com', licencia:'CAC-7832', notas:'Supervisor de obra' },
-    ],
-    config: { labor:32, tax:10.25, overhead:15, margen:35 }
-  };
-}
-
-let DB = loadDB();
-let currentUser = null;
-let confirmCallback = null;
-let _chartIngresos = null, _chartTipos = null;
-
-// ════════════════════════════════════════════════
-// AUTH
-// ════════════════════════════════════════════════
-function doLogin() {
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const pass = document.getElementById('login-pass').value;
-  const user = DB.users.find(u => u.email.toLowerCase() === email && u.password === pass);
-  if (!user) {
-    document.getElementById('login-error').style.display = 'block';
-    document.getElementById('login-pass').value = '';
-    return;
-  }
-  document.getElementById('login-error').style.display = 'none';
-  currentUser = user;
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').classList.add('visible');
-  updateSidebarUser();
-  loadProfileForm();
-  refreshAll();
-  buildDashboardCharts();
-  const now = new Date();
-  document.getElementById('topbar-date').textContent = 'California · ' + now.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
-}
-
-// Allow Enter key on login
-document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-document.getElementById('login-email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-pass').focus(); });
-
-function doLogout() {
-  currentUser = null;
-  document.getElementById('app').classList.remove('visible');
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('login-email').value = '';
-  document.getElementById('login-pass').value = '';
-}
-
-function showForgot() {
-  toast('Función disponible próximamente. Contacta al administrador.', 'info');
-}
-
-function updateSidebarUser() {
-  if (!currentUser) return;
-  const initials = currentUser.nombre.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
-  document.getElementById('sidebar-av').textContent = initials;
-  document.getElementById('sidebar-name').textContent = currentUser.nombre;
-  document.getElementById('sidebar-email').textContent = currentUser.email;
-}
-
-// ════════════════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════════════════
-const SCREEN_TITLES = {
-  dashboard:'Dashboard', clientes:'Clientes', proyectos:'Proyectos',
-  presupuestos:'Presupuestos', inventario:'Inventario',
-  empleados:'Empleados', perfil:'Mi perfil'
-};
-
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  document.getElementById('page-title').textContent = SCREEN_TITLES[name] || name;
-  const map = { dashboard:0, clientes:1, proyectos:2, presupuestos:3, inventario:4, empleados:5, perfil:6 };
-  const items = document.querySelectorAll('.nav-item');
-  if (items[map[name]]) items[map[name]].classList.add('active');
-
-  if (name === 'dashboard') refreshDashboard();
-  if (name === 'clientes') renderClientes();
-  if (name === 'proyectos') renderProyectos();
-  if (name === 'presupuestos') renderPresupuestos();
-  if (name === 'inventario') renderInventario();
-  if (name === 'empleados') renderEmpleados();
-  if (name === 'perfil') loadProfileForm();
-}
-
-// ════════════════════════════════════════════════
-// TOAST
-// ════════════════════════════════════════════════
-function toast(msg, type='success') {
-  const el = document.createElement('div');
-  el.className = 'toast-item ' + (type === 'error' ? 'danger' : type === 'success' ? 'success' : '');
-  const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
-  el.textContent = icon + ' ' + msg;
-  document.getElementById('toast').appendChild(el);
-  setTimeout(() => el.remove(), 3200);
-}
-
-// ════════════════════════════════════════════════
-// CONFIRM DIALOG
-// ════════════════════════════════════════════════
-function openConfirm(title, msg, cb, btnLabel='Eliminar', icon='🗑️') {
-  document.getElementById('confirm-title').textContent = title;
-  document.getElementById('confirm-msg').textContent = msg;
-  document.getElementById('confirm-icon').textContent = icon;
-  document.getElementById('confirm-ok-btn').textContent = btnLabel;
-  confirmCallback = cb;
-  document.getElementById('confirm-overlay').classList.add('open');
-}
-function closeConfirm() { document.getElementById('confirm-overlay').classList.remove('open'); confirmCallback = null; }
-function confirmOk() { if (confirmCallback) confirmCallback(); closeConfirm(); }
-
-// ════════════════════════════════════════════════
-// MODALS
-// ════════════════════════════════════════════════
-function openModal(id) { document.getElementById('modal-' + id).classList.add('open'); }
-function closeModal(id) { document.getElementById('modal-' + id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
-
-// ════════════════════════════════════════════════
-// ID GENERATOR
-// ════════════════════════════════════════════════
-function nextId(arr) { return arr.length ? Math.max(...arr.map(x=>x.id)) + 1 : 1; }
-
-// ════════════════════════════════════════════════
-// DASHBOARD
-// ════════════════════════════════════════════════
-function refreshAll() {
-  updateBadges();
-  refreshDashboard();
-}
-
-function updateBadges() {
-  document.getElementById('nb-clientes').textContent = DB.clientes.length;
-  document.getElementById('nb-proyectos').textContent = DB.proyectos.filter(p=>p.estado==='activo').length;
-}
-
-function refreshDashboard() {
-  const totalIngresos = DB.presupuestos.filter(p=>p.estado==='Aprobado').reduce((s,p)=>s+p.total,0);
-  document.getElementById('d-ingresos').textContent = '$' + totalIngresos.toLocaleString();
-  document.getElementById('d-proyectos').textContent = DB.proyectos.filter(p=>p.estado==='activo').length;
-  document.getElementById('d-presup').textContent = DB.presupuestos.filter(p=>['Propuesta','Pendiente','Revisión'].includes(p.estado)).length;
-  document.getElementById('d-empleados').textContent = DB.empleados.length;
-
-  const recent = [...DB.presupuestos].reverse().slice(0,5);
-  const badges = { 'Aprobado':'badge-success','Pendiente':'badge-warning','Propuesta':'badge-info','Revisión':'badge-neutral','Rechazado':'badge-danger' };
-  document.getElementById('dash-presup-recent').innerHTML = recent.length ? recent.map(p => {
-    const cl = DB.clientes.find(c=>c.id===p.clienteId);
-    return `<tr>
-      <td style="font-family:'DM Mono',monospace;font-size:11.5px">${p.num}</td>
-      <td>${cl ? cl.nombre : '—'}</td>
-      <td style="color:var(--text-muted)">${p.proyecto}</td>
-      <td style="font-weight:600;font-family:'DM Mono',monospace">$${p.total.toLocaleString()}</td>
-      <td><span class="badge ${badges[p.estado]||'badge-neutral'}">${p.estado}</span></td>
-    </tr>`;
-  }).join('') : '<tr><td colspan="5" class="empty-state">Sin presupuestos aún</td></tr>';
-}
-
-function buildDashboardCharts() {
-  setTimeout(() => {
-    const ctx1 = document.getElementById('chartIngresos');
-    if (_chartIngresos) _chartIngresos.destroy();
-    _chartIngresos = new Chart(ctx1, {
-      type:'bar',
-      data:{
-        labels:['Ene','Feb','Mar','Abr','May','Jun'],
-        datasets:[
-          { label:'Ingresos', data:[32000,38000,29000,44000,48320,0], backgroundColor:'#2C5F8A', borderRadius:5 },
-          { label:'Meta', data:[35000,35000,35000,40000,45000,45000], type:'line', borderColor:'#E8821A', borderDash:[5,3], pointRadius:3, fill:false, tension:.3 }
-        ]
-      },
-      options:{ responsive:true, maintainAspectRatio:false,
-        plugins:{ legend:{ labels:{ font:{size:11}, boxWidth:12, padding:10 } } },
-        scales:{ y:{ grid:{color:'#F1F1F1'}, ticks:{ callback:v=>'$'+v.toLocaleString(), font:{size:11} } }, x:{ grid:{display:false}, ticks:{font:{size:11}} } }
-      }
-    });
-
-    const ctx2 = document.getElementById('chartTipos');
-    if (_chartTipos) _chartTipos.destroy();
-    _chartTipos = new Chart(ctx2, {
-      type:'doughnut',
-      data:{
-        labels:['Interior Res.','Exterior Res.','Comercial Int.','Comercial Ext.','Industrial'],
-        datasets:[{ data:[28,22,18,20,12], backgroundColor:['#2C5F8A','#4A86B8','#E8821A','#D4840A','#1E7C4A'], borderWidth:0 }]
-      },
-      options:{ responsive:true, maintainAspectRatio:false, cutout:'60%',
-        plugins:{ legend:{ position:'bottom', labels:{ font:{size:11}, padding:8, boxWidth:12 } } }
-      }
-    });
-  }, 100);
-}
-
-// ════════════════════════════════════════════════
-// CLIENTES CRUD
-// ════════════════════════════════════════════════
-function renderClientes() {
-  const q = (document.getElementById('clientes-search').value || '').toLowerCase();
-  const filtered = DB.clientes.filter(c =>
-    c.nombre.toLowerCase().includes(q) ||
-    c.empresa.toLowerCase().includes(q) ||
-    c.email.toLowerCase().includes(q) ||
-    c.ciudad.toLowerCase().includes(q)
-  );
-  document.getElementById('clientes-count').textContent = filtered.length + ' clientes' + (q ? ' (filtrado)' : '');
-  document.getElementById('clientes-tbody').innerHTML = filtered.length ? filtered.map(c => {
-    const np = DB.proyectos.filter(p=>p.clienteId===c.id).length;
-    return `<tr>
-      <td><span style="font-weight:500">${escHtml(c.nombre)}</span></td>
-      <td style="color:var(--text-muted)">${escHtml(c.empresa)}</td>
-      <td>${escHtml(c.ciudad)}, CA</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px">${escHtml(c.telefono)}</td>
-      <td style="color:var(--brand)">${escHtml(c.email)}</td>
-      <td><span class="badge badge-info">${np} proy.</span></td>
-      <td><div class="actions-cell">
-        <button class="btn btn-sm" onclick="editCliente(${c.id})">✏️ Editar</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteCliente(${c.id})">🗑️</button>
-      </div></td>
-    </tr>`;
-  }).join('') : '<tr><td colspan="7"><div class="empty-state"><div class="ei">👥</div><p>No hay clientes. Agrega el primero.</p></div></td></tr>';
-}
-
-function openNuevoCliente() {
-  document.getElementById('modal-cliente-title').textContent = 'Nuevo cliente';
-  ['c-id','c-nombre','c-empresa','c-tel','c-email','c-dir','c-ciudad','c-zip','c-notas'].forEach(id => document.getElementById(id).value = '');
-  openModal('nuevoCliente');
-}
-
-function editCliente(id) {
-  const c = DB.clientes.find(x=>x.id===id);
-  if (!c) return;
-  document.getElementById('modal-cliente-title').textContent = 'Editar cliente';
-  document.getElementById('c-id').value = id;
-  document.getElementById('c-nombre').value = c.nombre;
-  document.getElementById('c-empresa').value = c.empresa;
-  document.getElementById('c-tel').value = c.telefono;
-  document.getElementById('c-email').value = c.email;
-  document.getElementById('c-dir').value = c.dir || '';
-  document.getElementById('c-ciudad').value = c.ciudad;
-  document.getElementById('c-zip').value = c.zip || '';
-  document.getElementById('c-notas').value = c.notas || '';
-  openModal('nuevoCliente');
-}
-
-function saveCliente() {
-  const nombre = document.getElementById('c-nombre').value.trim();
-  if (!nombre) { toast('El nombre es requerido', 'error'); return; }
-  const id = parseInt(document.getElementById('c-id').value) || 0;
-  const data = {
-    nombre, empresa: document.getElementById('c-empresa').value.trim() || '—',
-    telefono: document.getElementById('c-tel').value.trim(),
-    email: document.getElementById('c-email').value.trim(),
-    dir: document.getElementById('c-dir').value.trim(),
-    ciudad: document.getElementById('c-ciudad').value.trim() || 'Los Angeles',
-    zip: document.getElementById('c-zip').value.trim(),
-    notas: document.getElementById('c-notas').value.trim(),
-  };
-  if (id) {
-    const idx = DB.clientes.findIndex(x=>x.id===id);
-    DB.clientes[idx] = { ...DB.clientes[idx], ...data };
-    toast('Cliente actualizado ✓');
-  } else {
-    DB.clientes.push({ id: nextId(DB.clientes), ...data });
-    toast('Cliente registrado ✓');
-  }
-  saveDB(); updateBadges(); renderClientes(); closeModal('nuevoCliente');
-}
-
-function deleteCliente(id) {
-  const c = DB.clientes.find(x=>x.id===id);
-  openConfirm('¿Eliminar cliente?', `Se eliminará "${c.nombre}" y todos sus datos. Esta acción no se puede deshacer.`, () => {
-    DB.clientes = DB.clientes.filter(x=>x.id!==id);
-    DB.proyectos = DB.proyectos.filter(x=>x.clienteId!==id);
-    DB.presupuestos = DB.presupuestos.filter(x=>x.clienteId!==id);
-    saveDB(); updateBadges(); renderClientes();
-    toast('Cliente eliminado', 'info');
-  });
-}
-
-// ════════════════════════════════════════════════
-// PROYECTOS CRUD
-// ════════════════════════════════════════════════
-function populateClienteSelect(selectId, selectedClienteId) {
-  const sel = document.getElementById(selectId);
-  sel.innerHTML = DB.clientes.map(c => `<option value="${c.id}" ${c.id===selectedClienteId?'selected':''}>${escHtml(c.nombre)}</option>`).join('');
-}
-
-function renderProyectos() {
-  const cols = { pendiente: 'proj-col-pending', activo: 'proj-col-active', completado: 'proj-col-done' };
-  Object.entries(cols).forEach(([estado, colId]) => {
-    const items = DB.proyectos.filter(p=>p.estado===estado);
-    const el = document.getElementById(colId);
-    el.innerHTML = items.length ? items.map(p => {
-      const cl = DB.clientes.find(c=>c.id===p.clienteId);
-      return `<div style="padding:11px 13px;border-bottom:1px solid var(--border)">
-        <div style="font-weight:500;font-size:13px">${escHtml(p.nombre)}</div>
-        <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${cl ? escHtml(cl.nombre) : '?'} · $${Number(p.valor).toLocaleString()}</div>
-        <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">${p.tipo} · ${p.subtipo}</div>
-        <div style="display:flex;gap:4px;margin-top:7px">
-          <button class="btn btn-sm" onclick="editProyecto(${p.id})">✏️</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteProyecto(${p.id})">🗑️</button>
-        </div>
-      </div>`;
-    }).join('') : '<div style="padding:20px;text-align:center;font-size:12px;color:var(--text-muted)">Sin proyectos</div>';
-  });
-}
-
-function editProyecto(id) {
-  const p = DB.proyectos.find(x=>x.id===id);
-  if (!p) return;
-  document.getElementById('modal-proyecto-title').textContent = 'Editar proyecto';
-  document.getElementById('p-id').value = id;
-  populateClienteSelect('p-cliente', p.clienteId);
-  document.getElementById('p-nombre').value = p.nombre;
-  document.getElementById('p-tipo').value = p.tipo;
-  document.getElementById('p-subtipo').value = p.subtipo;
-  document.getElementById('p-finicio').value = p.finicio || '';
-  document.getElementById('p-ffin').value = p.ffin || '';
-  document.getElementById('p-dir').value = p.dir || '';
-  document.getElementById('p-estado').value = p.estado;
-  document.getElementById('p-valor').value = p.valor;
-  openModal('nuevoProyecto');
-}
-
-function openNuevoProyecto() {
-  document.getElementById('modal-proyecto-title').textContent = 'Nuevo proyecto';
-  document.getElementById('p-id').value = '';
-  populateClienteSelect('p-cliente', 0);
-  ['p-nombre','p-finicio','p-ffin','p-dir','p-valor'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('p-tipo').value = 'Residencial';
-  document.getElementById('p-estado').value = 'pendiente';
-  openModal('nuevoProyecto');
-}
-
-function saveProyecto() {
-  const nombre = document.getElementById('p-nombre').value.trim();
-  if (!nombre) { toast('El nombre del proyecto es requerido', 'error'); return; }
-  const id = parseInt(document.getElementById('p-id').value) || 0;
-  const data = {
-    clienteId: parseInt(document.getElementById('p-cliente').value),
-    nombre, tipo: document.getElementById('p-tipo').value,
-    subtipo: document.getElementById('p-subtipo').value,
-    finicio: document.getElementById('p-finicio').value,
-    ffin: document.getElementById('p-ffin').value,
-    dir: document.getElementById('p-dir').value.trim(),
-    estado: document.getElementById('p-estado').value,
-    valor: parseFloat(document.getElementById('p-valor').value) || 0,
-  };
-  if (id) {
-    const idx = DB.proyectos.findIndex(x=>x.id===id);
-    DB.proyectos[idx] = { ...DB.proyectos[idx], ...data };
-    toast('Proyecto actualizado ✓');
-  } else {
-    DB.proyectos.push({ id: nextId(DB.proyectos), ...data });
-    toast('Proyecto creado ✓');
-  }
-  saveDB(); updateBadges(); renderProyectos(); closeModal('nuevoProyecto');
-}
-
-function deleteProyecto(id) {
-  const p = DB.proyectos.find(x=>x.id===id);
-  openConfirm('¿Eliminar proyecto?', `Se eliminará el proyecto "${p.nombre}". Los presupuestos asociados no se eliminarán.`, () => {
-    DB.proyectos = DB.proyectos.filter(x=>x.id!==id);
-    saveDB(); updateBadges(); renderProyectos();
-    toast('Proyecto eliminado', 'info');
-  });
-}
-
-// ════════════════════════════════════════════════
-// PRESUPUESTOS CRUD
-// ════════════════════════════════════════════════
-const RATES = {
-  paint: { standard:38, premium:62, luxury:68, exterior_grade:55, industrial:85 },
-  sqft_per_hour: { interior_res:70, exterior_res:55, interior_com:80, exterior_com:60, industrial:90, gabinetes:15, techo:65 },
-  sqft_per_gallon: 350
-};
-
-function calcPresupuesto() {
-  const sqft = parseFloat(document.getElementById('est-sqft').value) || 0;
-  const tipo = document.getElementById('est-tipo').value;
-  const capas = parseInt(document.getElementById('est-capas').value);
-  const pinturaType = document.getElementById('est-pintura').value;
-  const margen = (parseFloat(document.getElementById('est-margen').value) || DB.config.margen) / 100;
-  const labor_rate = DB.config.labor;
-  const overhead = DB.config.overhead / 100;
-  const tax_rate = DB.config.tax / 100;
-
-  if (!sqft) { document.getElementById('est-calc-result').style.display='none'; return; }
-
-  const hrs = (sqft * capas) / (RATES.sqft_per_hour[tipo] || 70);
-  const costLabor = hrs * labor_rate;
-  const gals = Math.ceil((sqft * capas) / RATES.sqft_per_gallon);
-  const costMat = gals * (RATES.paint[pinturaType] || 38) + sqft * 0.08;
-  const indirect = (costLabor + costMat) * overhead;
-  const base = costLabor + costMat + indirect;
-  const tax = costMat * tax_rate;
-  const profit = base * margen;
-  const total = base + tax + profit;
-
-  const fmt = v => '$' + Math.round(v).toLocaleString();
-  const detail = [
-    ['Mano de obra ('+Math.round(hrs)+' hrs)', fmt(costLabor)],
-    ['Materiales ('+gals+' gal)', fmt(costMat)],
-    ['Costos indirectos', fmt(indirect)],
-    ['Impuesto CA ('+DB.config.tax+'%)', fmt(tax)],
-    ['Margen utilidad ('+Math.round(margen*100)+'%)', fmt(profit)],
-  ];
-  document.getElementById('est-calc-detail').innerHTML = detail.map(([l,v])=>`<span style="color:var(--text-muted)">${l}</span><span style="font-weight:500">${v}</span>`).join('');
-  document.getElementById('est-calc-total').textContent = fmt(total);
-  document.getElementById('est-calc-result').style.display = 'block';
-  return Math.round(total);
-}
-
-function renderPresupuestos() {
-  const badges = { 'Aprobado':'badge-success','Pendiente':'badge-warning','Propuesta':'badge-info','Revisión':'badge-neutral','Rechazado':'badge-danger' };
-  document.getElementById('presup-tbody').innerHTML = DB.presupuestos.length ? [...DB.presupuestos].reverse().map(p => {
-    const cl = DB.clientes.find(c=>c.id===p.clienteId);
-    return `<tr>
-      <td style="font-family:'DM Mono',monospace;font-size:11.5px">${escHtml(p.num)}</td>
-      <td>${cl ? escHtml(cl.nombre) : '—'}</td>
-      <td style="color:var(--text-muted)">${escHtml(p.proyecto)}</td>
-      <td style="color:var(--text-muted)">${p.fecha}</td>
-      <td>${Number(p.sqft).toLocaleString()}</td>
-      <td style="font-weight:600;font-family:'DM Mono',monospace">$${Number(p.total).toLocaleString()}</td>
-      <td><span class="badge ${badges[p.estado]||'badge-neutral'}">${p.estado}</span></td>
-      <td><div class="actions-cell">
-        <button class="btn btn-sm" onclick="editPresupuesto(${p.id})">✏️ Editar</button>
-        <button class="btn btn-sm btn-danger" onclick="deletePresupuesto(${p.id})">🗑️</button>
-      </div></td>
-    </tr>`;
-  }).join('') : '<tr><td colspan="8"><div class="empty-state"><div class="ei">📋</div><p>No hay presupuestos aún.</p></div></td></tr>';
-}
-
-function openNuevoPresupuesto() {
-  document.getElementById('modal-presup-title').textContent = 'Nuevo presupuesto';
-  document.getElementById('est-id').value = '';
-  populateClienteSelect('est-cliente', 0);
-  const lastNum = DB.presupuestos.length ? DB.presupuestos[DB.presupuestos.length-1].num : 'EST-2026-000';
-  const nextNum = 'EST-2026-' + String(parseInt(lastNum.split('-')[2]||0)+1).padStart(3,'0');
-  document.getElementById('est-num').value = nextNum;
-  document.getElementById('est-fecha').value = new Date().toISOString().split('T')[0];
-  document.getElementById('est-sqft').value = '';
-  document.getElementById('est-margen').value = DB.config.margen;
-  document.getElementById('est-notas').value = '';
-  document.getElementById('est-calc-result').style.display = 'none';
-  openModal('nuevoPresupuesto');
-}
-
-function editPresupuesto(id) {
-  const p = DB.presupuestos.find(x=>x.id===id);
-  if (!p) return;
-  document.getElementById('modal-presup-title').textContent = 'Editar presupuesto';
-  document.getElementById('est-id').value = id;
-  populateClienteSelect('est-cliente', p.clienteId);
-  document.getElementById('est-num').value = p.num;
-  document.getElementById('est-proyecto').value = p.proyecto;
-  document.getElementById('est-fecha').value = p.fecha;
-  document.getElementById('est-sqft').value = p.sqft;
-  document.getElementById('est-tipo').value = p.tipo;
-  document.getElementById('est-capas').value = p.capas;
-  document.getElementById('est-pintura').value = p.pintura;
-  document.getElementById('est-margen').value = p.margen;
-  document.getElementById('est-estado').value = p.estado;
-  document.getElementById('est-notas').value = p.notas || '';
-  calcPresupuesto();
-  openModal('nuevoPresupuesto');
-}
-
-function savePresupuesto() {
-  const num = document.getElementById('est-num').value.trim();
-  const proyecto = document.getElementById('est-proyecto').value.trim();
-  if (!num || !proyecto) { toast('Número y proyecto son requeridos', 'error'); return; }
-  const sqft = parseFloat(document.getElementById('est-sqft').value) || 0;
-  const margen = parseFloat(document.getElementById('est-margen').value) || DB.config.margen;
-  const total = calcPresupuesto() || parseFloat(prompt('Total del presupuesto ($):', '0')) || 0;
-  const id = parseInt(document.getElementById('est-id').value) || 0;
-  const data = {
-    num, clienteId: parseInt(document.getElementById('est-cliente').value),
-    proyecto, fecha: document.getElementById('est-fecha').value,
-    sqft, tipo: document.getElementById('est-tipo').value,
-    capas: parseInt(document.getElementById('est-capas').value),
-    pintura: document.getElementById('est-pintura').value,
-    margen, total, estado: document.getElementById('est-estado').value,
-    notas: document.getElementById('est-notas').value.trim(),
-  };
-  if (id) {
-    const idx = DB.presupuestos.findIndex(x=>x.id===id);
-    DB.presupuestos[idx] = { ...DB.presupuestos[idx], ...data };
-    toast('Presupuesto actualizado ✓');
-  } else {
-    DB.presupuestos.push({ id: nextId(DB.presupuestos), ...data });
-    toast('Presupuesto creado ✓');
-  }
-  saveDB(); renderPresupuestos(); refreshDashboard(); closeModal('nuevoPresupuesto');
-}
-
-function deletePresupuesto(id) {
-  const p = DB.presupuestos.find(x=>x.id===id);
-  openConfirm('¿Eliminar presupuesto?', `Se eliminará el presupuesto ${p.num} ($${p.total.toLocaleString()}). Esta acción es permanente.`, () => {
-    DB.presupuestos = DB.presupuestos.filter(x=>x.id!==id);
-    saveDB(); renderPresupuestos(); refreshDashboard();
-    toast('Presupuesto eliminado', 'info');
-  });
-}
-
-// ════════════════════════════════════════════════
-// INVENTARIO CRUD
-// ════════════════════════════════════════════════
-function renderInventario() {
-  const ok = DB.inventario.filter(i=>i.stock>=i.min).length;
-  const low = DB.inventario.filter(i=>i.stock<i.min).length;
-  const val = DB.inventario.reduce((s,i)=>s+(i.precio*i.stock),0);
-  document.getElementById('inv-ok').textContent = ok;
-  document.getElementById('inv-low').textContent = low;
-  document.getElementById('inv-val').textContent = '$' + Math.round(val).toLocaleString();
-
-  document.getElementById('inv-tbody').innerHTML = DB.inventario.length ? DB.inventario.map(i => {
-    const pct = Math.min(100, Math.round((i.stock/(i.min*2.5))*100));
-    const color = i.stock<i.min ? 'var(--danger)' : i.stock<i.min*1.5 ? 'var(--warning)' : 'var(--success)';
-    const badge = i.stock<i.min ? 'badge-danger' : i.stock<i.min*1.5 ? 'badge-warning' : 'badge-success';
-    const label = i.stock<i.min ? 'Bajo' : i.stock<i.min*1.5 ? 'Limitado' : 'OK';
-    return `<tr>
-      <td style="font-weight:500">${escHtml(i.nombre)}</td>
-      <td><span class="badge badge-neutral">${i.cat}</span></td>
-      <td style="font-family:'DM Mono',monospace">$${i.precio}/${i.unidad}</td>
-      <td>
-        <input type="number" class="inline-edit" style="width:70px" value="${i.stock}" onchange="updateStock(${i.id},this.value)" min="0">
-      </td>
-      <td style="color:var(--text-muted)">${i.min}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:7px">
-          <div class="stock-bar" style="width:70px"><div class="stock-fill" style="width:${pct}%;background:${color}"></div></div>
-          <span class="badge ${badge}" style="font-size:10px">${label}</span>
-        </div>
-      </td>
-      <td><div class="actions-cell">
-        <button class="btn btn-sm" onclick="editMaterial(${i.id})">✏️</button>
-        <button class="btn btn-sm btn-danger" onclick="deleteMaterial(${i.id})">🗑️</button>
-      </div></td>
-    </tr>`;
-  }).join('') : '<tr><td colspan="7"><div class="empty-state"><div class="ei">📦</div><p>Sin materiales. Agrega productos.</p></div></td></tr>';
-}
-
-function updateStock(id, val) {
-  const idx = DB.inventario.findIndex(x=>x.id===id);
-  if (idx>=0) { DB.inventario[idx].stock = parseInt(val)||0; saveDB(); renderInventario(); }
-}
-
-function openNuevoMaterial() {
-  document.getElementById('modal-mat-title').textContent = 'Agregar material';
-  document.getElementById('m-id').value = '';
-  ['m-nombre','m-precio','m-stock','m-min'].forEach(id=>document.getElementById(id).value='');
-  openModal('nuevoMaterial');
-}
-
-function editMaterial(id) {
-  const m = DB.inventario.find(x=>x.id===id);
-  if (!m) return;
-  document.getElementById('modal-mat-title').textContent = 'Editar material';
-  document.getElementById('m-id').value = id;
-  document.getElementById('m-nombre').value = m.nombre;
-  document.getElementById('m-cat').value = m.cat;
-  document.getElementById('m-unidad').value = m.unidad;
-  document.getElementById('m-precio').value = m.precio;
-  document.getElementById('m-stock').value = m.stock;
-  document.getElementById('m-min').value = m.min;
-  openModal('nuevoMaterial');
-}
-
-function saveMaterial() {
-  const nombre = document.getElementById('m-nombre').value.trim();
-  if (!nombre) { toast('El nombre es requerido', 'error'); return; }
-  const id = parseInt(document.getElementById('m-id').value) || 0;
-  const data = {
-    nombre, cat: document.getElementById('m-cat').value,
-    unidad: document.getElementById('m-unidad').value,
-    precio: parseFloat(document.getElementById('m-precio').value)||0,
-    stock: parseInt(document.getElementById('m-stock').value)||0,
-    min: parseInt(document.getElementById('m-min').value)||0,
-  };
-  if (id) {
-    const idx = DB.inventario.findIndex(x=>x.id===id);
-    DB.inventario[idx] = { ...DB.inventario[idx], ...data };
-    toast('Material actualizado ✓');
-  } else {
-    DB.inventario.push({ id: nextId(DB.inventario), ...data });
-    toast('Material agregado ✓');
-  }
-  saveDB(); renderInventario(); closeModal('nuevoMaterial');
-}
-
-function deleteMaterial(id) {
-  const m = DB.inventario.find(x=>x.id===id);
-  openConfirm('¿Eliminar material?', `Se eliminará "${m.nombre}" del inventario.`, () => {
-    DB.inventario = DB.inventario.filter(x=>x.id!==id);
-    saveDB(); renderInventario();
-    toast('Material eliminado', 'info');
-  });
-}
-
-// ════════════════════════════════════════════════
-// EMPLEADOS CRUD
-// ════════════════════════════════════════════════
-const EMP_COLORS = ['var(--brand)','var(--accent)','var(--success)','var(--warning)','var(--brand-mid)','#7C3AED','#0891B2'];
-
-function renderEmpleados() {
-  const grid = document.getElementById('empleados-grid');
-  grid.innerHTML = DB.empleados.length ? DB.empleados.map((e,i) => {
-    const initials = e.nombre.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
-    return `<div class="card">
-      <div class="card-body" style="text-align:center;padding:22px 18px">
-        <div style="width:52px;height:52px;border-radius:50%;background:${EMP_COLORS[i%EMP_COLORS.length]};color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;margin:0 auto 11px">${initials}</div>
-        <div style="font-size:14px;font-weight:600">${escHtml(e.nombre)}</div>
-        <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px">${e.puesto}</div>
-        <div style="margin-top:13px;display:flex;flex-direction:column;gap:5px;text-align:left;font-size:12.5px">
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Tarifa</span><span style="font-weight:500;font-family:'DM Mono',monospace">$${e.tarifa}/hr</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Tel</span><span>${escHtml(e.telefono)}</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Licencia</span><span>${escHtml(e.licencia||'—')}</span></div>
-        </div>
-        <div style="display:flex;gap:6px;margin-top:13px;justify-content:center">
-          <button class="btn btn-sm" style="flex:1" onclick="editEmpleado(${e.id})">✏️ Editar</button>
-          <button class="btn btn-sm btn-danger" onclick="deleteEmpleado(${e.id})">🗑️</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('') : '<div class="empty-state" style="grid-column:1/-1"><div class="ei">👷</div><p>No hay empleados registrados.</p></div>';
-}
-
-function openNuevoEmpleado() {
-  document.getElementById('modal-emp-title').textContent = 'Agregar empleado';
-  document.getElementById('e-id').value = '';
-  ['e-nombre','e-tarifa','e-tel','e-email','e-lic','e-notas'].forEach(id=>document.getElementById(id).value='');
-  openModal('nuevoEmpleado');
-}
-
-function editEmpleado(id) {
-  const e = DB.empleados.find(x=>x.id===id);
-  if (!e) return;
-  document.getElementById('modal-emp-title').textContent = 'Editar empleado';
-  document.getElementById('e-id').value = id;
-  document.getElementById('e-nombre').value = e.nombre;
-  document.getElementById('e-puesto').value = e.puesto;
-  document.getElementById('e-tarifa').value = e.tarifa;
-  document.getElementById('e-tel').value = e.telefono;
-  document.getElementById('e-email').value = e.email || '';
-  document.getElementById('e-lic').value = e.licencia || '';
-  document.getElementById('e-notas').value = e.notas || '';
-  openModal('nuevoEmpleado');
-}
-
-function saveEmpleado() {
-  const nombre = document.getElementById('e-nombre').value.trim();
-  if (!nombre) { toast('El nombre es requerido', 'error'); return; }
-  const id = parseInt(document.getElementById('e-id').value) || 0;
-  const data = {
-    nombre, puesto: document.getElementById('e-puesto').value,
-    tarifa: parseFloat(document.getElementById('e-tarifa').value)||0,
-    telefono: document.getElementById('e-tel').value.trim(),
-    email: document.getElementById('e-email').value.trim(),
-    licencia: document.getElementById('e-lic').value.trim() || '—',
-    notas: document.getElementById('e-notas').value.trim(),
-  };
-  if (id) {
-    const idx = DB.empleados.findIndex(x=>x.id===id);
-    DB.empleados[idx] = { ...DB.empleados[idx], ...data };
-    toast('Empleado actualizado ✓');
-  } else {
-    DB.empleados.push({ id: nextId(DB.empleados), ...data });
-    toast('Empleado agregado ✓');
-  }
-  saveDB(); renderEmpleados(); refreshDashboard(); closeModal('nuevoEmpleado');
-}
-
-function deleteEmpleado(id) {
-  const e = DB.empleados.find(x=>x.id===id);
-  openConfirm('¿Eliminar empleado?', `Se eliminará a "${e.nombre}" del equipo. Esta acción no se puede deshacer.`, () => {
-    DB.empleados = DB.empleados.filter(x=>x.id!==id);
-    saveDB(); renderEmpleados(); refreshDashboard();
-    toast('Empleado eliminado', 'info');
-  });
-}
-
-// ════════════════════════════════════════════════
-// PERFIL / USUARIO
-// ════════════════════════════════════════════════
-function loadProfileForm() {
-  if (!currentUser) return;
-  const initials = currentUser.nombre.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
-  document.getElementById('profile-avatar').textContent = initials;
-  document.getElementById('profile-name-display').textContent = currentUser.nombre;
-  document.getElementById('profile-email-display').textContent = currentUser.email;
-  document.getElementById('pf-nombre').value = currentUser.nombre;
-  document.getElementById('pf-email').value = currentUser.email;
-  document.getElementById('pf-tel').value = currentUser.telefono || '';
-  document.getElementById('pf-puesto').value = currentUser.puesto || '';
-  document.getElementById('pf-empresa').value = currentUser.empresa || '';
-  document.getElementById('cfg-labor').value = DB.config.labor;
-  document.getElementById('cfg-tax').value = DB.config.tax;
-  document.getElementById('cfg-overhead').value = DB.config.overhead;
-  document.getElementById('cfg-margen').value = DB.config.margen;
-}
-
-function saveProfile() {
-  const nombre = document.getElementById('pf-nombre').value.trim();
-  const email = document.getElementById('pf-email').value.trim().toLowerCase();
-  if (!nombre || !email) { toast('Nombre y email son requeridos', 'error'); return; }
-  // Check email collision with other users
-  const collision = DB.users.find(u => u.email.toLowerCase()===email && u.id!==currentUser.id);
-  if (collision) { toast('Ese email ya está en uso', 'error'); return; }
-  const idx = DB.users.findIndex(u=>u.id===currentUser.id);
-  DB.users[idx] = {
-    ...DB.users[idx],
-    nombre, email,
-    telefono: document.getElementById('pf-tel').value.trim(),
-    puesto: document.getElementById('pf-puesto').value.trim(),
-    empresa: document.getElementById('pf-empresa').value.trim(),
-  };
-  currentUser = DB.users[idx];
-  saveDB(); updateSidebarUser(); loadProfileForm();
-  toast('Perfil actualizado ✓');
-}
-
-function changePassword() {
-  const actual = document.getElementById('pw-actual').value;
-  const nueva = document.getElementById('pw-nueva').value;
-  const confirm = document.getElementById('pw-confirmar').value;
-  if (actual !== currentUser.password) { toast('La contraseña actual es incorrecta', 'error'); return; }
-  if (nueva.length < 6) { toast('La nueva contraseña debe tener al menos 6 caracteres', 'error'); return; }
-  if (nueva !== confirm) { toast('Las contraseñas no coinciden', 'error'); return; }
-  const idx = DB.users.findIndex(u=>u.id===currentUser.id);
-  DB.users[idx].password = nueva;
-  currentUser = DB.users[idx];
-  saveDB();
-  ['pw-actual','pw-nueva','pw-confirmar'].forEach(id=>document.getElementById(id).value='');
-  toast('Contraseña actualizada ✓');
-}
-
-function saveConfig() {
-  DB.config.labor = parseFloat(document.getElementById('cfg-labor').value)||32;
-  DB.config.tax = parseFloat(document.getElementById('cfg-tax').value)||10.25;
-  DB.config.overhead = parseFloat(document.getElementById('cfg-overhead').value)||15;
-  DB.config.margen = parseFloat(document.getElementById('cfg-margen').value)||35;
-  saveDB(); toast('Configuración guardada ✓');
-}
-
-function confirmDeleteAll() {
-  openConfirm(
-    '¿Borrar TODOS los datos?',
-    'Se eliminarán todos los clientes, proyectos, presupuestos, inventario y empleados. Solo se conservará tu cuenta de usuario. Esta acción NO SE PUEDE DESHACER.',
-    () => {
-      const users = [...DB.users];
-      const config = {...DB.config};
-      DB = getDefaultDB();
-      DB.users = users;
-      DB.config = config;
-      // Clear all except users and config
-      DB.clientes = []; DB.proyectos = []; DB.presupuestos = []; DB.inventario = []; DB.empleados = [];
-      saveDB(); refreshAll();
-      toast('Todos los datos han sido eliminados', 'info');
-    },
-    'Sí, borrar todo',
-    '⚠️'
-  );
-}
-
-// ════════════════════════════════════════════════
-// HELPERS
-// ════════════════════════════════════════════════
-function escHtml(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// Patch nav-item clicks to call proper open functions
-document.querySelectorAll('.nav-item').forEach((item, i) => {
-  const screens = ['dashboard','clientes','proyectos','presupuestos','inventario','empleados','perfil'];
-  const name = screens[i];
-  if (name) item.setAttribute('onclick', `showScreen('${name}')`);
-});
-
-// Override modal open buttons to init forms
-const origOpenModal = openModal;
-window.openModal = function(id) {
-  if (id === 'nuevoCliente') openNuevoCliente();
-  else if (id === 'nuevoProyecto') openNuevoProyecto();
-  else if (id === 'nuevoPresupuesto') openNuevoPresupuesto();
-  else if (id === 'nuevoMaterial') openNuevoMaterial();
-  else if (id === 'nuevoEmpleado') openNuevoEmpleado();
-  else origOpenModal(id);
-};
-
-// Auto-login check (remember session in sessionStorage)
-window.addEventListener('DOMContentLoaded', () => {
-  const lastEmail = sessionStorage.getItem('pp_session');
-  if (lastEmail) {
-    const user = DB.users.find(u=>u.email.toLowerCase()===lastEmail.toLowerCase());
-    if (user) {
-      currentUser = user;
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('app').classList.add('visible');
-      updateSidebarUser(); loadProfileForm(); refreshAll(); buildDashboardCharts();
-    }
-  }
-  document.getElementById('login-email').focus();
-});
-
-// Save session on login
-const origDoLogin = doLogin;
-window.doLogin = function() {
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const pass = document.getElementById('login-pass').value;
-  const user = DB.users.find(u=>u.email.toLowerCase()===email && u.password===pass);
-  if (!user) {
-    document.getElementById('login-error').style.display='block';
-    document.getElementById('login-pass').value='';
-    return;
-  }
-  sessionStorage.setItem('pp_session', user.email);
-  document.getElementById('login-error').style.display='none';
-  currentUser = user;
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').classList.add('visible');
-  updateSidebarUser(); loadProfileForm(); refreshAll(); buildDashboardCharts();
-  const now = new Date();
-  document.getElementById('topbar-date').textContent = 'California · ' + now.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
-};
-
-const origDoLogout = doLogout;
-window.doLogout = function() {
-  sessionStorage.removeItem('pp_session');
-  currentUser = null;
-  document.getElementById('app').classList.remove('visible');
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('login-email').value='';
-  document.getElementById('login-pass').value='';
-};
-</script>
 </body>
 </html>
