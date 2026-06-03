@@ -1,0 +1,39 @@
+/* ============================================================
+   PaintPro CA — Login Screen
+   ============================================================ */
+
+#login-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a3a56 0%, #2C5F8A 50%, #1a4a6b 100%);
+}
+
+.login-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 44px 40px;
+  width: 420px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.25);
+}
+
+.login-logo          { text-align: center; margin-bottom: 28px; }
+.login-logo .icon    { font-size: 40px; display: block; margin-bottom: 8px; }
+.login-logo .name    { font-size: 22px; font-weight: 700; color: var(--brand); }
+.login-logo .sub     { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.login-title { font-size: var(--text-lg); font-weight: 600; margin-bottom: 20px; }
+
+.login-field          { margin-bottom: 14px; }
+.login-field label    { display: block; font-size: var(--text-sm); font-weight: 500; color: var(--text-muted); margin-bottom: 5px; }
+.login-field input    { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; font-family: var(--font-sans); transition: border-color .15s; }
+.login-field input:focus { outline: none; border-color: var(--brand); }
+
+.login-btn         { width: 100%; background: var(--brand); color: #fff; border: none; border-radius: 8px; padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 6px; font-family: var(--font-sans); transition: background .15s; }
+.login-btn:hover   { background: var(--brand-mid); }
+
+.login-error  { color: var(--danger); font-size: 12px; margin-top: 8px; display: none; }
+.login-forgot { font-size: 12px; color: var(--brand); display: block; text-align: right; margin-top: 6px; cursor: pointer; }
+
+.demo-hint { margin-top: 18px; padding: 12px; background: var(--surface); border-radius: 8px; font-size: 12px; color: var(--text-muted); text-align: center; }
