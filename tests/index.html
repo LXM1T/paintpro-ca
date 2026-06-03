@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaintPro CA — Test Runner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --brand:   #2C5F8A;
+    --success: #1E7C4A;
+    --danger:  #C0392B;
+    --warning: #D4840A;
+    --surface: #F8F9FC;
+    --border:  #E5E7EB;
+    --text:    #1A1F2E;
+    --muted:   #6B7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--text); font-size: 14px; padding: 24px; }
+
+  .header {
+    background: var(--brand);
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header p  { font-size: 13px; opacity: .7; margin-top: 3px; }
+
+  .run-btn {
+    background: #fff;
+    color: var(--brand);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity .15s;
+  }
+  .run-btn:hover { opacity: .9; }
+  .run-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* Summary bar */
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .summary-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .summary-card .num  { font-size: 28px; font-weight: 700; font-family: 'DM Mono'; }
+  .summary-card .lbl  { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .summary-card.pass  { border-top: 3px solid var(--success); }
+  .summary-card.fail  { border-top: 3px solid var(--danger); }
+  .summary-card.total { border-top: 3px solid var(--brand); }
+  .summary-card.time  { border-top: 3px solid var(--warning); }
+  .pass .num  { color: var(--success); }
+  .fail .num  { color: var(--danger); }
+  .total .num { color: var(--brand); }
+  .time .num  { color: var(--warning); }
+
+  /* Progress bar */
+  .progress-wrap { background: var(--border); border-radius: 100px; height: 8px; margin-bottom: 24px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--success); border-radius: 100px; transition: width .4s ease; }
+
+  /* Suites */
+  .suites { display: flex; flex-direction: column; gap: 14px; }
+  .suite {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .suite-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .suite-header:hover { background: #F1F3F7; }
+  .suite-name  { font-size: 13.5px; font-weight: 600; }
+  .suite-stats { font-size: 12px; color: var(--muted); }
+  .suite-badge {
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  .badge-pass { background: #E8F5EE; color: var(--success); }
+  .badge-fail { background: #FDECEA; color: var(--danger); }
+
+  .tests-list { padding: 8px 0; }
+  .test-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #F3F4F6;
+    transition: background .1s;
+  }
+  .test-row:last-child { border-bottom: none; }
+  .test-row:hover { background: #FAFBFD; }
+  .test-icon { flex-shrink: 0; margin-top: 1px; }
+  .test-name { flex: 1; }
+  .test-name.fail { color: var(--danger); }
+  .test-error {
+    font-size: 11.5px;
+    color: var(--danger);
+    font-family: 'DM Mono', monospace;
+    background: #FDECEA;
+    border-radius: 5px;
+    padding: 4px 8px;
+    margin-top: 4px;
+  }
+
+  /* Empty state */
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .empty .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty p { font-size: 14px; }
+
+  /* Feature filter */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .filter-btn {
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #fff;
+    color: var(--text);
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .filter-btn:hover  { background: var(--surface); }
+  .filter-btn.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+  .loading { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--brand); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 8px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>🎨 PaintPro CA — Test Runner</h1>
+    <p>Tests unitarios por feature · California 2026</p>
+  </div>
+  <button class="run-btn" id="run-btn" onclick="runAllTests()">▶ Ejecutar todos</button>
+</div>
+
+<div class="summary" id="summary" style="display:none">
+  <div class="summary-card total"><div class="num" id="s-total">0</div><div class="lbl">Total tests</div></div>
+  <div class="summary-card pass"> <div class="num" id="s-pass">0</div> <div class="lbl">Pasaron ✅</div></div>
+  <div class="summary-card fail"> <div class="num" id="s-fail">0</div> <div class="lbl">Fallaron ❌</div></div>
+  <div class="summary-card time"> <div class="num" id="s-time">0ms</div><div class="lbl">Tiempo</div></div>
+</div>
+
+<div class="progress-wrap" id="progress-wrap" style="display:none">
+  <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+</div>
+
+<div class="filters" id="filters" style="display:none">
+  <button class="filter-btn active" onclick="filterSuites('all', this)">Todos</button>
+  <button class="filter-btn" onclick="filterSuites('pass', this)">✅ Pasaron</button>
+  <button class="filter-btn" onclick="filterSuites('fail', this)">❌ Fallaron</button>
+</div>
+
+<div id="output">
+  <div class="empty">
+    <div class="icon">🧪</div>
+    <p>Haz clic en <strong>"Ejecutar todos"</strong> para correr los tests.</p>
+    <p style="margin-top:6px;font-size:13px">Se verifican todas las features: Auth, Clientes, Empleados, Proyectos, Presupuestos, Inventario, Core</p>
+  </div>
+</div>
+
+<!-- ── Load all app source files ── -->
+<script src="../src/core/database.js"></script>
+<script src="../src/core/auth.js"></script>
+<script src="../src/core/router.js"></script>
+<script src="../src/core/utils.js"></script>
+<script src="../src/features/clientes/clientes.repository.js"></script>
+<script src="../src/features/clientes/clientes.service.js"></script>
+<script src="../src/features/clientes/clientes.ui.js"></script>
+<script src="../src/features/empleados/empleados.js"></script>
+<script src="../src/features/presupuestos/presupuestos.calculator.js"></script>
+<script src="../src/features/presupuestos/presupuestos.js"></script>
+<script src="../src/features/proyectos/proyectos-inventario.js"></script>
+<script src="../src/features/dashboard/dashboard-perfil.js"></script>
+
+<!-- ── Load test files ── -->
+<script src="test.utils.js"></script>
+<script src="auth.test.js"></script>
+<script src="clientes.test.js"></script>
+<script src="empleados.test.js"></script>
+<script src="proyectos.test.js"></script>
+<script src="presupuestos.test.js"></script>
+<script src="inventario.test.js"></script>
+<script src="core.test.js"></script>
+
+<script>
+// Boot AppDB silently (suppress session restore)
+AppDB.load();
+
+const FEATURE_RUNNERS = [
+  { name: '🔐 Auth',          fn: runAuthTests },
+  { name: '👥 Clientes',      fn: runClientesTests },
+  { name: '👷 Empleados',     fn: runEmpleadosTests },
+  { name: '🏗️ Proyectos',     fn: runProyectosTests },
+  { name: '📋 Presupuestos',  fn: runPresupuestosTests },
+  { name: '📦 Inventario',    fn: runInventarioTests },
+  { name: '⚙️ Core',          fn: runCoreTests },
+];
+
+function runAllTests() {
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Ejecutando...';
+
+  // Small delay to allow spinner to render
+  setTimeout(() => {
+    TestRunner.reset();
+    const startTime = performance.now();
+
+    // Run all test suites
+    FEATURE_RUNNERS.forEach(runner => runner.fn());
+
+    const elapsed = Math.round(performance.now() - startTime);
+    const { passed, failed, total } = TestRunner.summary();
+
+    renderResults(elapsed, passed, failed, total);
+    btn.disabled = false;
+    btn.innerHTML = '🔄 Re-ejecutar';
+  }, 50);
+}
+
+function renderResults(elapsed, passed, failed, total) {
+  // Summary cards
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-pass').textContent  = passed;
+  document.getElementById('s-fail').textContent  = failed;
+  document.getElementById('s-time').textContent  = elapsed + 'ms';
+  document.getElementById('summary').style.display = 'grid';
+
+  // Progress bar
+  const pct = total > 0 ? Math.round((passed / total) * 100) : 0;
+  document.getElementById('progress-wrap').style.display = 'block';
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-fill').style.background = failed > 0 ? '#E8821A' : '#1E7C4A';
+
+  // Filters
+  document.getElementById('filters').style.display = 'flex';
+
+  // Group results by suite
+  const suiteMap = {};
+  TestRunner.results.forEach(r => {
+    if (!suiteMap[r.suite]) suiteMap[r.suite] = [];
+    suiteMap[r.suite].push(r);
+  });
+
+  let html = '<div class="suites">';
+  for (const [suiteName, tests] of Object.entries(suiteMap)) {
+    const sPass = tests.filter(t => t.passed).length;
+    const sFail = tests.filter(t => !t.passed).length;
+    const allOk = sFail === 0;
+    const featureClass = allOk ? 'suite-pass' : 'suite-fail';
+
+    html += `
+      <div class="suite" data-status="${allOk ? 'pass' : 'fail'}">
+        <div class="suite-header" onclick="toggleSuite(this)">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">${allOk ? '✅' : '❌'}</span>
+            <span class="suite-name">${suiteName}</span>
+            <span class="suite-badge ${allOk ? 'badge-pass' : 'badge-fail'}">${sPass}/${tests.length}</span>
+          </div>
+          <div class="suite-stats">${tests.length} test${tests.length !== 1 ? 's' : ''} · <span style="color:${allOk ? 'var(--success)' : 'var(--danger)'}">${allOk ? 'todos pasaron' : sFail + ' fallaron'}</span></div>
+        </div>
+        <div class="tests-list">`;
+
+    tests.forEach(t => {
+      html += `
+          <div class="test-row">
+            <span class="test-icon">${t.passed ? '✅' : '❌'}</span>
+            <div>
+              <div class="test-name ${t.passed ? '' : 'fail'}">${t.name}</div>
+              ${t.error ? `<div class="test-error">${t.error}</div>` : ''}
+            </div>
+          </div>`;
+    });
+
+    html += `</div></div>`;
+  }
+  html += '</div>';
+
+  document.getElementById('output').innerHTML = html;
+}
+
+function toggleSuite(header) {
+  const list = header.nextElementSibling;
+  list.style.display = list.style.display === 'none' ? 'block' : 'none';
+}
+
+function filterSuites(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('.suite').forEach(suite => {
+    const status = suite.dataset.status;
+    if (type === 'all' || type === status) {
+      suite.style.display = 'block';
+    } else {
+      suite.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
