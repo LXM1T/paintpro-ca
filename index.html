@@ -5,7 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PaintPro CA — Sistema de Gestión 2026</title>
 
-<!-- ── Styles ── -->
+<!--
+  ╔══════════════════════════════════════════════════════╗
+  ║  CRITICAL INLINE STYLES                              ║
+  ║  Garantizan el estado inicial correcto ANTES de      ║
+  ║  que carguen los archivos CSS externos.              ║
+  ║  Sin esto: #app sería visible y todos los screens    ║
+  ║  aparecerían al mismo tiempo.                        ║
+  ╚══════════════════════════════════════════════════════╝
+-->
+<style>
+  /* Estado inicial garantizado — no depende de CSS externo */
+  #app               { display: none !important; }
+  #app.visible       { display: flex !important; }
+  #login-screen      { display: flex; }
+  #login-screen.hidden { display: none !important; }
+  .screen            { display: none !important; }
+  .screen.active     { display: block !important; }
+  .modal-overlay     { display: none !important; }
+  .modal-overlay.open { display: flex !important; }
+  .confirm-overlay   { display: none !important; }
+  .confirm-overlay.open { display: flex !important; }
+  #est-calc-result   { display: none; }
+  /* Prevent flash of unstyled content */
+  body { margin: 0; padding: 0; font-family: sans-serif; background: #F8F9FC; }
+</style>
+
+<!-- ── External Stylesheets ── -->
 <link rel="stylesheet" href="styles/variables.css">
 <link rel="stylesheet" href="styles/base.css">
 <link rel="stylesheet" href="styles/components.css">
@@ -14,13 +40,14 @@
 <link rel="stylesheet" href="styles/screens/login.css">
 <link rel="stylesheet" href="styles/screens/perfil.css">
 
-<!-- ── Charts ── -->
+<!-- ── Charts (defer — no blocking) ── -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
 </head>
 <body>
 
 <!-- ═══════════════════════════════════════════════════════════
      LOGIN SCREEN
+     Visible por defecto. Se oculta en app.js tras autenticar.
 ════════════════════════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-card">
@@ -55,6 +82,8 @@
 
 <!-- ═══════════════════════════════════════════════════════════
      APP SHELL
+     Oculto por defecto (display:none).
+     Solo se muestra tras login exitoso via app.js → _showApp()
 ════════════════════════════════════════════════════════════ -->
 <div id="app">
 
@@ -116,7 +145,6 @@
   <!-- ── MAIN ── -->
   <div id="main">
 
-    <!-- TOPBAR -->
     <header id="topbar">
       <div class="page-title" id="page-title">Dashboard</div>
       <div class="topbar-actions">
@@ -125,7 +153,6 @@
       </div>
     </header>
 
-    <!-- CONTENT -->
     <main id="content">
 
       <!-- ════ DASHBOARD ════ -->
@@ -152,7 +179,6 @@
             <div class="stat-change">en nómina</div>
           </div>
         </div>
-
         <div class="two-col">
           <div class="card">
             <div class="card-header">Ingresos mensuales</div>
@@ -163,7 +189,6 @@
             <div class="card-body"><div class="chart-box"><canvas id="chartTipos"></canvas></div></div>
           </div>
         </div>
-
         <div class="card">
           <div class="card-header">Presupuestos recientes</div>
           <div class="table-wrap">
@@ -192,9 +217,7 @@
         <div class="card">
           <div class="table-wrap">
             <table>
-              <thead>
-                <tr><th>Nombre</th><th>Empresa</th><th>Ciudad</th><th>Teléfono</th><th>Email</th><th>Proyectos</th><th>Acciones</th></tr>
-              </thead>
+              <thead><tr><th>Nombre</th><th>Empresa</th><th>Ciudad</th><th>Teléfono</th><th>Email</th><th>Proyectos</th><th>Acciones</th></tr></thead>
               <tbody id="clientes-tbody"></tbody>
             </table>
           </div>
@@ -232,9 +255,7 @@
         <div class="card">
           <div class="table-wrap">
             <table>
-              <thead>
-                <tr><th>#</th><th>Cliente</th><th>Proyecto</th><th>Fecha</th><th>Área</th><th>Total</th><th>Estado</th><th>Acciones</th></tr>
-              </thead>
+              <thead><tr><th>#</th><th>Cliente</th><th>Proyecto</th><th>Fecha</th><th>Área</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>
               <tbody id="presup-tbody"></tbody>
             </table>
           </div>
@@ -255,9 +276,7 @@
         <div class="card">
           <div class="table-wrap">
             <table>
-              <thead>
-                <tr><th>Producto</th><th>Categoría</th><th>Precio unit.</th><th>Stock</th><th>Mínimo</th><th>Nivel</th><th>Acciones</th></tr>
-              </thead>
+              <thead><tr><th>Producto</th><th>Categoría</th><th>Precio unit.</th><th>Stock</th><th>Mínimo</th><th>Nivel</th><th>Acciones</th></tr></thead>
               <tbody id="inv-tbody"></tbody>
             </table>
           </div>
@@ -277,7 +296,6 @@
       <section id="screen-perfil" class="screen">
         <div class="section-row"><div class="section-title">Mi perfil</div></div>
         <div class="two-col">
-
           <div class="card">
             <div class="card-header">Información personal</div>
             <div class="card-body">
@@ -296,7 +314,6 @@
               <button class="btn btn-primary btn-full" style="margin-top:14px" onclick="saveProfile()">Guardar cambios</button>
             </div>
           </div>
-
           <div>
             <div class="card" style="margin-bottom:14px">
               <div class="card-header">Cambiar contraseña</div>
@@ -307,7 +324,6 @@
                 <button class="btn btn-primary btn-full" onclick="changePassword()">Actualizar contraseña</button>
               </div>
             </div>
-
             <div class="card">
               <div class="card-header">Configuración (California 2026)</div>
               <div class="card-body">
@@ -321,13 +337,12 @@
                 <hr class="section-divider">
                 <div class="danger-zone">
                   <div class="danger-zone-title">⚠ Zona de peligro</div>
-                  <div class="danger-zone-desc">Eliminar todos los datos del sistema. Irreversible.</div>
+                  <div class="danger-zone-desc">Eliminar todos los datos. Irreversible.</div>
                   <button class="btn btn-danger" onclick="confirmDeleteAll()">Borrar todos los datos</button>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
@@ -336,11 +351,10 @@
 </div><!-- /app -->
 
 <!-- ═══════════════════════════════════════════════════════════
-     MODALS
+     MODALS — fuera de #app para evitar overflow:hidden
 ════════════════════════════════════════════════════════════ -->
 
-<!-- Nuevo / Editar Cliente -->
-<div class="modal-overlay" id="modal-nuevoCliente" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="modal-nuevoCliente" role="dialog" aria-modal="true" aria-labelledby="modal-cliente-title">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-cliente-title">Nuevo cliente</div>
@@ -366,8 +380,7 @@
   </div>
 </div>
 
-<!-- Nuevo / Editar Proyecto -->
-<div class="modal-overlay" id="modal-nuevoProyecto" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="modal-nuevoProyecto" role="dialog" aria-modal="true" aria-labelledby="modal-proyecto-title">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-proyecto-title">Nuevo proyecto</div>
@@ -377,7 +390,7 @@
       <input type="hidden" id="p-id">
       <div class="form-grid">
         <div class="field"><label>Cliente *</label><select id="p-cliente"></select></div>
-        <div class="field"><label>Nombre del proyecto *</label><input type="text" id="p-nombre" placeholder="Residencia Sunset Hills"></div>
+        <div class="field"><label>Nombre del proyecto *</label><input type="text" id="p-nombre"></div>
         <div class="field"><label>Tipo</label>
           <select id="p-tipo"><option>Residencial</option><option>Comercial</option><option>Industrial</option></select>
         </div>
@@ -394,7 +407,7 @@
             <option value="completado">Completado</option>
           </select>
         </div>
-        <div class="field"><label>Valor estimado ($)</label><input type="number" id="p-valor" placeholder="5000"></div>
+        <div class="field"><label>Valor estimado ($)</label><input type="number" id="p-valor"></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -404,8 +417,7 @@
   </div>
 </div>
 
-<!-- Nuevo / Editar Presupuesto -->
-<div class="modal-overlay" id="modal-nuevoPresupuesto" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="modal-nuevoPresupuesto" role="dialog" aria-modal="true" aria-labelledby="modal-presup-title">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-presup-title">Nuevo presupuesto</div>
@@ -414,11 +426,11 @@
     <div class="modal-body">
       <input type="hidden" id="est-id">
       <div class="form-grid">
-        <div class="field"><label>Número *</label><input type="text" id="est-num" placeholder="EST-2026-001"></div>
+        <div class="field"><label>Número *</label><input type="text" id="est-num"></div>
         <div class="field"><label>Cliente *</label><select id="est-cliente"></select></div>
-        <div class="field"><label>Descripción *</label><input type="text" id="est-proyecto" placeholder="Interior Residencial"></div>
+        <div class="field"><label>Descripción *</label><input type="text" id="est-proyecto"></div>
         <div class="field"><label>Fecha</label><input type="date" id="est-fecha"></div>
-        <div class="field"><label>Área (sqft)</label><input type="number" id="est-sqft" placeholder="1500" oninput="calcPresupuesto()"></div>
+        <div class="field"><label>Área (sqft)</label><input type="number" id="est-sqft" oninput="calcPresupuesto()"></div>
         <div class="field"><label>Tipo de trabajo</label>
           <select id="est-tipo" onchange="calcPresupuesto()">
             <option value="interior_res">Interior Residencial</option>
@@ -455,17 +467,14 @@
           </select>
         </div>
       </div>
-
-      <!-- Auto-calculation result -->
-      <div id="est-calc-result" class="calc-result-box" style="display:none">
+      <div id="est-calc-result" class="calc-result-box">
         <div class="calc-title">Cálculo automático (CA 2026)</div>
         <div class="calc-grid" id="est-calc-detail"></div>
         <div class="calc-total">Total: <span id="est-calc-total">—</span></div>
       </div>
-
       <div class="field form-full" style="margin-top:12px">
         <label>Notas</label>
-        <textarea id="est-notas" placeholder="Condiciones especiales, alcance..."></textarea>
+        <textarea id="est-notas"></textarea>
       </div>
     </div>
     <div class="modal-footer">
@@ -475,8 +484,7 @@
   </div>
 </div>
 
-<!-- Nuevo / Editar Material -->
-<div class="modal-overlay" id="modal-nuevoMaterial" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="modal-nuevoMaterial" role="dialog" aria-modal="true" aria-labelledby="modal-mat-title">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-mat-title">Agregar material</div>
@@ -485,16 +493,16 @@
     <div class="modal-body">
       <input type="hidden" id="m-id">
       <div class="form-grid">
-        <div class="field form-full"><label>Nombre del producto *</label><input type="text" id="m-nombre" placeholder="Sherwin-Williams Duration Ext."></div>
+        <div class="field form-full"><label>Nombre del producto *</label><input type="text" id="m-nombre"></div>
         <div class="field"><label>Categoría</label>
           <select id="m-cat"><option>Pintura</option><option>Primer</option><option>Herramienta</option><option>Suministro</option></select>
         </div>
         <div class="field"><label>Unidad</label>
           <select id="m-unidad"><option>Galón</option><option>Cuarto</option><option>Pieza</option><option>Rollo</option><option>Paquete</option></select>
         </div>
-        <div class="field"><label>Precio unitario ($)</label><input type="number" id="m-precio" placeholder="38.00" step="0.01"></div>
-        <div class="field"><label>Stock actual</label><input type="number" id="m-stock" placeholder="20"></div>
-        <div class="field"><label>Stock mínimo</label><input type="number" id="m-min" placeholder="10"></div>
+        <div class="field"><label>Precio unitario ($)</label><input type="number" id="m-precio" step="0.01"></div>
+        <div class="field"><label>Stock actual</label><input type="number" id="m-stock"></div>
+        <div class="field"><label>Stock mínimo</label><input type="number" id="m-min"></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -504,8 +512,7 @@
   </div>
 </div>
 
-<!-- Nuevo / Editar Empleado -->
-<div class="modal-overlay" id="modal-nuevoEmpleado" role="dialog" aria-modal="true">
+<div class="modal-overlay" id="modal-nuevoEmpleado" role="dialog" aria-modal="true" aria-labelledby="modal-emp-title">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title" id="modal-emp-title">Agregar empleado</div>
@@ -514,15 +521,15 @@
     <div class="modal-body">
       <input type="hidden" id="e-id">
       <div class="form-grid">
-        <div class="field"><label>Nombre completo *</label><input type="text" id="e-nombre" placeholder="Miguel Hernández"></div>
+        <div class="field"><label>Nombre completo *</label><input type="text" id="e-nombre"></div>
         <div class="field"><label>Puesto</label>
           <select id="e-puesto"><option>Pintor Senior</option><option>Pintor</option><option>Asistente</option><option>Supervisor</option><option>Gerente</option></select>
         </div>
-        <div class="field"><label>Tarifa ($/hora) *</label><input type="number" id="e-tarifa" placeholder="32" step="0.5"></div>
-        <div class="field"><label>Teléfono</label><input type="text" id="e-tel" placeholder="(555) 000-0000"></div>
-        <div class="field"><label>Email</label><input type="email" id="e-email" placeholder="email@example.com"></div>
-        <div class="field"><label>Licencia CA #</label><input type="text" id="e-lic" placeholder="CAC-0000 (opcional)"></div>
-        <div class="field form-full"><label>Notas</label><textarea id="e-notas" placeholder="Especialidades, disponibilidad..."></textarea></div>
+        <div class="field"><label>Tarifa ($/hora) *</label><input type="number" id="e-tarifa" step="0.5"></div>
+        <div class="field"><label>Teléfono</label><input type="text" id="e-tel"></div>
+        <div class="field"><label>Email</label><input type="email" id="e-email"></div>
+        <div class="field"><label>Licencia CA #</label><input type="text" id="e-lic"></div>
+        <div class="field form-full"><label>Notas</label><textarea id="e-notas"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -533,7 +540,7 @@
 </div>
 
 <!-- Confirm Dialog -->
-<div class="confirm-overlay" id="confirm-overlay" role="dialog" aria-modal="true">
+<div class="confirm-overlay" id="confirm-overlay" role="alertdialog" aria-modal="true">
   <div class="confirm-box">
     <div class="confirm-icon" id="confirm-icon">⚠️</div>
     <div class="confirm-title" id="confirm-title">¿Confirmar acción?</div>
@@ -545,18 +552,22 @@
   </div>
 </div>
 
-<!-- Toast container -->
-<div id="toast" aria-live="polite"></div>
+<!-- Toast -->
+<div id="toast" aria-live="polite" aria-atomic="false"></div>
 
 <!-- ═══════════════════════════════════════════════════════════
-     JAVASCRIPT — Core (order matters)
+     JAVASCRIPT
+     Orden estricto: Core → Features → App bootstrap
+     Todos sincrónicos para garantizar dependencias resueltas
 ════════════════════════════════════════════════════════════ -->
+
+<!-- Core -->
 <script src="src/core/database.js"></script>
 <script src="src/core/auth.js"></script>
 <script src="src/core/router.js"></script>
 <script src="src/core/utils.js"></script>
 
-<!-- Features -->
+<!-- Features (cada feature registra sus handlers en Router) -->
 <script src="src/features/clientes/clientes.repository.js"></script>
 <script src="src/features/clientes/clientes.service.js"></script>
 <script src="src/features/clientes/clientes.ui.js"></script>
@@ -566,7 +577,7 @@
 <script src="src/features/proyectos/proyectos-inventario.js"></script>
 <script src="src/features/dashboard/dashboard-perfil.js"></script>
 
-<!-- App bootstrap (last) -->
+<!-- Bootstrap — siempre al último -->
 <script src="src/app.js"></script>
 
 </body>
