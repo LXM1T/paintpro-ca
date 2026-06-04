@@ -63,6 +63,31 @@ window.AppUI = {
     const dateStr = now.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' });
     const topbarDate = Utils.el('topbar-date');
     if (topbarDate) topbarDate.textContent = `California · ${dateStr}`;
+
+    // Show DB connection status
+    this._updateDBStatus();
+  },
+
+  // ── DB connection status indicator ────────────────────────
+  _updateDBStatus() {
+    const dot  = Utils.el('db-status-dot');
+    const text = Utils.el('db-status-text');
+    if (!dot || !text) return;
+
+    // Check immediately
+    const setStatus = (online) => {
+      dot.style.background  = online ? '#1E7C4A' : '#D4840A';
+      text.textContent      = online ? 'Supabase ✓' : 'Modo local';
+      text.style.color      = online ? 'var(--success)' : 'var(--warning)';
+    };
+
+    // Initial state while loading
+    setStatus(false);
+    text.textContent = 'Conectando...';
+
+    // Update after DB loads
+    setTimeout(() => setStatus(AppDB.isOnline()), 2500);
+    setTimeout(() => setStatus(AppDB.isOnline()), 5000);
   },
 
   // ── Show login ────────────────────────────────────────────
