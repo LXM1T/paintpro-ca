@@ -87,3 +87,73 @@ window.Auth = {
     return !!this.currentUser;
   },
 };
+
+  // ── Register (create new account) ────────────────────────
+  register(formData) {
+    const { nombre, email, password, confirmar, empresa, telefono } = formData;
+
+    // Validations
+    if (!nombre?.trim() || nombre.trim().length < 2)
+      return { success: false, error: 'El nombre debe tener al menos 2 caracteres.' };
+
+    if (!email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return { success: false, error: 'Ingresa un correo electrónico válido.' };
+
+    if (!password || password.length < 8)
+      return { success: false, error: 'La contraseña debe tener al menos 8 caracteres.' };
+
+    if (!/[A-Z]/.test(password))
+      return { success: false, error: 'La contraseña debe contener al menos una mayúscula.' };
+
+    if (!/[0-9]/.test(password))
+      return { success: false, error: 'La contraseña debe contener al menos un número.' };
+
+    if (password !== confirmar)
+      return { success: false, error: 'Las contraseñas no coinciden.' };
+
+    const db = window.AppDB.data;
+
+    // Check email already taken
+    if (db.users.find(u => u.email.toLowerCase() === email.toLowerCase().trim()))
+      return { success: false, error: 'Ya existe una cuenta con ese correo electrónico.' };
+
+    // Create user
+    const newUser = {
+      id:       window.AppDB.nextId('users'),
+      nombre:   nombre.trim(),
+      email:    email.toLowerCase().trim(),
+      password,
+      telefono: telefono?.trim() || '',
+      puesto:   'Administrador',
+      empresa:  empresa?.trim() || 'Mi Empresa de Pintura',
+    };
+
+    db.users.push(newUser);
+    window.AppDB.save();
+
+    // Auto login after register
+    this.currentUser = newUser;
+    sessionStorage.setItem('pp_session', newUser.email);
+    return { success: true, user: newUser };
+  },
+
+  // ── Password strength ────────────────────────────────────
+  passwordStrength(password) {
+    if (!password) return { score: 0, label: '', color: '' };
+    let score = 0;
+    if (password.length >= 8)   score++;
+    if (password.length >= 12)  score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    const levels = [
+      { label: '',          color: '' },
+      { label: 'Muy débil', color: '#C0392B' },
+      { label: 'Débil',     color: '#E8821A' },
+      { label: 'Regular',   color: '#D4840A' },
+      { label: 'Buena',     color: '#2C5F8A' },
+      { label: 'Excelente', color: '#1E7C4A' },
+    ];
+    return { score, ...levels[Math.min(score, 5)] };
+  },
