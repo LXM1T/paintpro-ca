@@ -1,0 +1,75 @@
+# ============================================================
+# PaintPro CA — .gitignore
+# ============================================================
+
+# ── Variables de entorno (NUNCA subir al repo) ───────────────
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+.env.*.local
+
+# ── Dependencias ─────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ── Build outputs ─────────────────────────────────────────────
+.next/
+.nuxt/
+dist/
+build/
+out/
+
+# ── Vercel ────────────────────────────────────────────────────
+.vercel/
+
+# ── Sistema operativo ─────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── IDEs y editores ───────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ── Logs ──────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Archivos temporales ───────────────────────────────────────
+tmp/
+temp/
+*.tmp
+*.bak
+
+# ── Cobertura de tests ────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Supabase local ────────────────────────────────────────────
+supabase/.branches/
+supabase/.temp/
+
+# ── Secretos y llaves ─────────────────────────────────────────
+*.pem
+*.key
+*.cert
+secrets/
+private/
