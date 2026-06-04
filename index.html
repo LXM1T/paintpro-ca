@@ -74,6 +74,10 @@
     <button class="login-btn" id="login-btn-submit">Entrar al sistema</button>
     <span class="login-forgot" onclick="showForgot()">¿Olvidaste tu contraseña?</span>
 
+    <div class="auth-switch" style="margin-top:12px">
+      ¿No tienes cuenta? <a onclick="showRegister()">Regístrate gratis</a>
+    </div>
+
     <div class="demo-hint">
       Demo: <strong>admin@paintpro.com</strong> / <strong>demo2026</strong>
     </div>
@@ -85,55 +89,171 @@
      Oculto por defecto (display:none).
      Solo se muestra tras login exitoso via app.js → _showApp()
 ════════════════════════════════════════════════════════════ -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     REGISTER SCREEN
+     Multi-step: 1) Cuenta  2) Empresa  3) Confirmación
+════════════════════════════════════════════════════════════ -->
+<div id="register-screen">
+  <div class="register-card">
+    <div class="login-logo">
+      <span class="icon">🎨</span>
+      <div class="name">PaintPro CA</div>
+      <div class="sub">Crea tu cuenta — Gratis</div>
+    </div>
+
+    <!-- Steps indicator -->
+    <div class="register-steps">
+      <div class="step-dot active" id="step-dot-1">1</div>
+      <div class="step-line" id="step-line-1"></div>
+      <div class="step-dot" id="step-dot-2">2</div>
+      <div class="step-line" id="step-line-2"></div>
+      <div class="step-dot" id="step-dot-3">3</div>
+    </div>
+
+    <!-- STEP 1: Datos personales -->
+    <div class="register-step active" id="reg-step-1">
+      <div class="login-title" style="font-size:15px;margin-bottom:16px">Datos de acceso</div>
+      <div class="login-field">
+        <label>Nombre completo *</label>
+        <input type="text" id="reg-nombre" placeholder="Juan Martínez" autocomplete="name">
+      </div>
+      <div class="login-field">
+        <label>Correo electrónico *</label>
+        <input type="email" id="reg-email" placeholder="juan@mipintura.com" autocomplete="email">
+      </div>
+      <div class="login-field">
+        <label>Contraseña *</label>
+        <input type="password" id="reg-password" placeholder="Mínimo 8 caracteres" oninput="RegisterUI.checkPassword(this.value)">
+        <div class="password-strength"><div class="password-strength-fill" id="pw-strength-bar" style="width:0%"></div></div>
+        <div class="strength-label" id="pw-strength-label"></div>
+      </div>
+      <div class="login-field">
+        <label>Confirmar contraseña *</label>
+        <input type="password" id="reg-confirmar" placeholder="Repite tu contraseña">
+      </div>
+      <div id="reg-error-1" class="login-error"></div>
+      <button class="login-btn" onclick="RegisterUI.nextStep(1)">Continuar →</button>
+    </div>
+
+    <!-- STEP 2: Datos de empresa -->
+    <div class="register-step" id="reg-step-2">
+      <div class="login-title" style="font-size:15px;margin-bottom:16px">Tu empresa de pintura</div>
+      <div class="login-field">
+        <label>Nombre de la empresa *</label>
+        <input type="text" id="reg-empresa" placeholder="Ej: LA Premium Painting Co.">
+      </div>
+      <div class="login-field">
+        <label>Teléfono</label>
+        <input type="tel" id="reg-telefono" placeholder="(555) 000-0000" autocomplete="tel">
+      </div>
+      <div class="login-field">
+        <label>Ciudad (California)</label>
+        <input type="text" id="reg-ciudad" placeholder="Los Angeles, Pasadena, Burbank...">
+      </div>
+      <div class="login-field">
+        <label>Licencia CSLB # (opcional)</label>
+        <input type="text" id="reg-licencia" placeholder="892341">
+      </div>
+      <div id="reg-error-2" class="login-error"></div>
+      <button class="login-btn" onclick="RegisterUI.nextStep(2)">Continuar →</button>
+      <button class="login-btn" onclick="RegisterUI.prevStep(2)"
+        style="background:none;color:var(--brand);border:1px solid var(--border);margin-top:8px">← Atrás</button>
+    </div>
+
+    <!-- STEP 3: Confirmación -->
+    <div class="register-step" id="reg-step-3">
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:48px;margin-bottom:12px">🎉</div>
+        <div style="font-size:17px;font-weight:700;color:var(--brand);margin-bottom:8px">¡Todo listo!</div>
+        <div style="font-size:13.5px;color:var(--text-muted);line-height:1.6;margin-bottom:20px">
+          Revisa tus datos antes de crear la cuenta.
+        </div>
+      </div>
+      <div id="reg-summary"
+        style="background:var(--surface);border-radius:10px;padding:16px;font-size:13px;margin-bottom:20px">
+      </div>
+      <div id="reg-error-3" class="login-error"></div>
+      <button class="login-btn" id="reg-submit-btn" onclick="RegisterUI.submit()">
+        Crear cuenta gratis
+      </button>
+      <button class="login-btn" onclick="RegisterUI.prevStep(3)"
+        style="background:none;color:var(--brand);border:1px solid var(--border);margin-top:8px">← Atrás</button>
+    </div>
+
+    <div class="auth-switch">
+      ¿Ya tienes cuenta? <a onclick="showLogin()">Inicia sesión</a>
+    </div>
+  </div>
+</div>
+
 <div id="app">
 
   <!-- ── SIDEBAR ── -->
   <nav id="sidebar" role="navigation" aria-label="Menú principal">
+    <!-- Toggle button — desktop collapse -->
+    <button class="sidebar-toggle" id="sidebar-toggle-btn" onclick="SidebarUI.toggle()" aria-label="Colapsar menú" title="Colapsar menú">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
     <div class="logo-area">
       <div class="logo-icon" aria-hidden="true">🎨</div>
-      <div class="brand-name">PaintPro CA</div>
-      <div class="brand-sub">Sistema de Gestión 2026</div>
+      <div class="logo-text">
+        <div class="brand-name">PaintPro CA</div>
+        <div class="brand-sub">Gestión 2026</div>
+      </div>
     </div>
 
     <div class="nav-section">
       <div class="nav-label">Principal</div>
-      <div class="nav-item active" onclick="showScreen('dashboard')" role="button" tabindex="0">
-        <span class="icon">📊</span> Dashboard
+      <div class="nav-item active" onclick="showScreen('dashboard')" data-label="Dashboard" role="button" tabindex="0">
+        <span class="icon">📊</span>
+        <span class="nav-item-text">Dashboard</span>
+        
       </div>
-      <div class="nav-item" onclick="showScreen('clientes')" role="button" tabindex="0">
-        <span class="icon">👥</span> Clientes
+      <div class="nav-item " onclick="showScreen('clientes')" data-label="Clientes" role="button" tabindex="0">
+        <span class="icon">👥</span>
+        <span class="nav-item-text">Clientes</span>
         <span class="nav-badge" id="nb-clientes">0</span>
       </div>
-      <div class="nav-item" onclick="showScreen('proyectos')" role="button" tabindex="0">
-        <span class="icon">🏗️</span> Proyectos
+      <div class="nav-item " onclick="showScreen('proyectos')" data-label="Proyectos" role="button" tabindex="0">
+        <span class="icon">🏗️</span>
+        <span class="nav-item-text">Proyectos</span>
         <span class="nav-badge" id="nb-proyectos">0</span>
       </div>
     </div>
 
     <div class="nav-section">
       <div class="nav-label">Operaciones</div>
-      <div class="nav-item" onclick="showScreen('presupuestos')" role="button" tabindex="0">
-        <span class="icon">📋</span> Presupuestos
+      <div class="nav-item " onclick="showScreen('presupuestos')" data-label="Presupuestos" role="button" tabindex="0">
+        <span class="icon">📋</span>
+        <span class="nav-item-text">Presupuestos</span>
+        
       </div>
-      <div class="nav-item" onclick="showScreen('inventario')" role="button" tabindex="0">
-        <span class="icon">📦</span> Inventario
+      <div class="nav-item " onclick="showScreen('inventario')" data-label="Inventario" role="button" tabindex="0">
+        <span class="icon">📦</span>
+        <span class="nav-item-text">Inventario</span>
+        
       </div>
-      <div class="nav-item" onclick="showScreen('empleados')" role="button" tabindex="0">
-        <span class="icon">👷</span> Empleados
+      <div class="nav-item " onclick="showScreen('empleados')" data-label="Empleados" role="button" tabindex="0">
+        <span class="icon">👷</span>
+        <span class="nav-item-text">Empleados</span>
+        
       </div>
     </div>
 
     <div class="nav-section">
       <div class="nav-label">Cuenta</div>
-      <div class="nav-item" onclick="showScreen('perfil')" role="button" tabindex="0">
-        <span class="icon">⚙️</span> Mi perfil
+      <div class="nav-item " onclick="showScreen('perfil')" data-label="Mi perfil" role="button" tabindex="0">
+        <span class="icon">⚙️</span>
+        <span class="nav-item-text">Mi perfil</span>
+        
       </div>
     </div>
 
     <div class="sidebar-footer">
-      <div class="user-pill" onclick="showScreen('perfil')" role="button" tabindex="0">
+      <div class="user-pill" onclick="showScreen('perfil')" role="button" tabindex="0" title="Mi perfil">
         <div class="user-av" id="sidebar-av">—</div>
-        <div>
+        <div class="user-text">
           <div class="user-name" id="sidebar-name">—</div>
           <div class="user-role" id="sidebar-email">—</div>
         </div>
@@ -146,13 +266,19 @@
   <div id="main">
 
     <header id="topbar">
-      <div class="page-title" id="page-title">Dashboard</div>
+      <div class="topbar-left">
+        <!-- Hamburger — mobile only -->
+        <button class="hamburger-btn" id="hamburger-btn" onclick="SidebarUI.openMobile()" aria-label="Abrir menú">
+          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="page-title" id="page-title">Dashboard</div>
+      </div>
       <div class="topbar-actions">
         <div id="db-status" style="display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-muted)">
           <span id="db-status-dot" style="width:7px;height:7px;border-radius:50%;background:#ccc;display:inline-block"></span>
           <span id="db-status-text">Conectando...</span>
         </div>
-        <div class="text-muted" style="font-size:12px" id="topbar-date">California · 2026</div>
+        <div class="text-muted topbar-date-wrap" style="font-size:12px" id="topbar-date">California · 2026</div>
         <button class="btn btn-primary" onclick="openModal('nuevoPresupuesto')">+ Nuevo presupuesto</button>
       </div>
     </header>
@@ -556,6 +682,9 @@
   </div>
 </div>
 
+<!-- Mobile sidebar overlay -->
+<div id="sidebar-overlay" onclick="SidebarUI.closeMobile()"></div>
+
 <!-- Toast -->
 <div id="toast" aria-live="polite" aria-atomic="false"></div>
 
@@ -571,6 +700,10 @@
 <script src="src/core/auth.js"></script>
 <script src="src/core/router.js"></script>
 <script src="src/core/utils.js"></script>
+
+<!-- Sidebar & Auth UI -->
+<script src="src/features/sidebar/sidebar.ui.js"></script>
+<script src="src/features/auth/register.ui.js"></script>
 
 <!-- Features (cada feature registra sus handlers en Router) -->
 <script src="src/features/clientes/clientes.repository.js"></script>
