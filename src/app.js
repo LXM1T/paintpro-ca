@@ -8,6 +8,7 @@ window.AppUI = {
   // ── Boot ─────────────────────────────────────────────────
   init() {
     AppDB.load();
+    SidebarUI.init();
 
     // Garantizar estado inicial correcto via JS
     // (no depender únicamente de CSS)
@@ -207,3 +208,20 @@ window.openModal = function(id) {
 
 // ── Boot on DOM ready ─────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => AppUI.init());
+
+// ── Auth screen switching (global) ────────────────────────────
+window.showRegister = function() {
+  Utils.el('login-screen').style.display    = 'none';
+  Utils.el('register-screen').classList.add('visible');
+};
+
+window.showLogin = function() {
+  Utils.el('register-screen').classList.remove('visible');
+  Utils.el('login-screen').style.display    = '';
+  setTimeout(() => Utils.el('login-email')?.focus(), 50);
+};
+
+window.hideRegister = function() {
+  Utils.el('register-screen').classList.remove('visible');
+  Utils.el('login-screen').style.display = 'none';
+};
