@@ -37,3 +37,98 @@
 .login-forgot { font-size: 12px; color: var(--brand); display: block; text-align: right; margin-top: 6px; cursor: pointer; }
 
 .demo-hint { margin-top: 18px; padding: 12px; background: var(--surface); border-radius: 8px; font-size: 12px; color: var(--text-muted); text-align: center; }
+
+/* ── Mobile responsive ── */
+@media (max-width: 480px) {
+  #login-screen { padding: 16px; align-items: flex-start; padding-top: 40px; }
+  .login-card   { width: 100%; padding: 32px 24px; border-radius: 14px; }
+  .login-logo .icon { font-size: 34px; }
+  .login-logo .name { font-size: 20px; }
+}
+
+/* ── Register screen variations ── */
+#register-screen {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a3a56 0%, #2C5F8A 50%, #1a4a6b 100%);
+  padding: 20px;
+}
+#register-screen.visible { display: flex; }
+
+.register-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 36px 40px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.25);
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+.register-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 24px;
+}
+.step-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600;
+  background: var(--border);
+  color: var(--text-muted);
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.step-dot.active  { background: var(--brand);   color: #fff; }
+.step-dot.done    { background: var(--success); color: #fff; }
+.step-line {
+  height: 2px; width: 36px;
+  background: var(--border);
+  transition: background .2s;
+}
+.step-line.done { background: var(--success); }
+
+.register-step { display: none; }
+.register-step.active { display: block; }
+
+.auth-switch {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+.auth-switch a {
+  color: var(--brand);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+.auth-switch a:hover { text-decoration: underline; }
+
+.password-strength {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin-top: 6px;
+  overflow: hidden;
+}
+.password-strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width .3s, background .3s;
+}
+.strength-label {
+  font-size: 11px;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .register-card { padding: 28px 20px; }
+}
